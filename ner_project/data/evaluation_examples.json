@@ -1,0 +1,480 @@
+[
+  {
+    "id": "eval_001",
+    "source": "Maybank Group",
+    "title": "Maybank posts higher net profit of RM2.5b in Q3 2026",
+    "body": "Kuala Lumpur: Maybank Group reported a net profit of RM2.5 billion for the third quarter of 2026, up 8% from the same period last year. Group president and CEO Datuk Khairussaleh Ramli said the growth was driven by strong loan growth and improved asset quality. The bank's total assets grew to RM1.2 trillion.",
+    "gold_entities": [
+      {
+        "text": "Maybank Group",
+        "label": "ORG",
+        "start": 0,
+        "end": 13
+      },
+      {
+        "text": "RM2.5 billion",
+        "label": "MONEY",
+        "start": 60,
+        "end": 73
+      },
+      {
+        "text": "third quarter of 2026",
+        "label": "DATE",
+        "start": 82,
+        "end": 103
+      },
+      {
+        "text": "Datuk Khairussaleh Ramli",
+        "label": "PERSON",
+        "start": 155,
+        "end": 179
+      },
+      {
+        "text": "RM1.2 trillion",
+        "label": "MONEY",
+        "start": 252,
+        "end": 266
+      },
+      {
+        "text": "Kuala Lumpur",
+        "label": "GPE",
+        "start": 0,
+        "end": 12
+      }
+    ],
+    "notes": "Standard financial news. Clear ORG, PERSON, MONEY, DATE entities.",
+    "difficulty": "easy"
+  },
+  {
+    "id": "eval_002",
+    "source": "CIMB Group Malaysia",
+    "title": "CIMB Group wins Best Bank in Malaysia award at Euromoney Awards",
+    "body": "CIMB Group has been named the Best Bank in Malaysia at the Euromoney Awards for Excellence 2026, held in London. This marks the third consecutive year CIMB has received this recognition. Group CEO Tengku Datuk Seri Zafrul Abdul Aziz said the award reflects the bank's transformation journey.",
+    "gold_entities": [
+      {
+        "text": "CIMB Group",
+        "label": "ORG",
+        "start": 0,
+        "end": 10
+      },
+      {
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 32,
+        "end": 40
+      },
+      {
+        "text": "Euromoney Awards for Excellence 2026",
+        "label": "EVENT",
+        "start": 55,
+        "end": 91
+      },
+      {
+        "text": "London",
+        "label": "GPE",
+        "start": 101,
+        "end": 107
+      },
+      {
+        "text": "Tengku Datuk Seri Zafrul Abdul Aziz",
+        "label": "PERSON",
+        "start": 192,
+        "end": 227
+      }
+    ],
+    "notes": "Award event entity; noble title before person name (ambiguous).",
+    "difficulty": "medium"
+  },
+  {
+    "id": "eval_003",
+    "source": "Hong Leong Bank",
+    "title": "Hong Leong Bank launches digital banking platform HLB Connect",
+    "body": "Hong Leong Bank Berhad (HLB) today launched HLB Connect, its revamped digital banking platform, at its headquarters in Kuala Lumpur. The launch was attended by Bank Negara Malaysia deputy governor Jessica Chew and more than 200 industry guests.",
+    "gold_entities": [
+      {
+        "text": "Hong Leong Bank Berhad",
+        "label": "ORG",
+        "start": 0,
+        "end": 22
+      },
+      {
+        "text": "HLB",
+        "label": "ORG",
+        "start": 24,
+        "end": 27
+      },
+      {
+        "text": "HLB Connect",
+        "label": "ORG",
+        "start": 44,
+        "end": 55
+      },
+      {
+        "text": "Kuala Lumpur",
+        "label": "GPE",
+        "start": 117,
+        "end": 129
+      },
+      {
+        "text": "Bank Negara Malaysia",
+        "label": "ORG",
+        "start": 159,
+        "end": 179
+      },
+      {
+        "text": "Jessica Chew",
+        "label": "PERSON",
+        "start": 196,
+        "end": 208
+      }
+    ],
+    "notes": "Abbreviation ORG and product name ORG. Ambiguous 'HLB Connect'.",
+    "difficulty": "medium"
+  },
+  {
+    "id": "eval_004",
+    "source": "RHB Bank",
+    "title": "RHB Bank partners with Grab for SME financing solutions",
+    "body": "RHB Bank and Grab Financial Group announced a strategic partnership on 15 September 2026 to offer SME financing solutions across Malaysia, Singapore, and Thailand. The collaboration aims to serve 100,000 small businesses by end of 2027.",
+    "gold_entities": [
+      {
+        "text": "RHB Bank",
+        "label": "ORG",
+        "start": 0,
+        "end": 8
+      },
+      {
+        "text": "Grab Financial Group",
+        "label": "ORG",
+        "start": 25,
+        "end": 45
+      },
+      {
+        "text": "15 September 2026",
+        "label": "DATE",
+        "start": 78,
+        "end": 95
+      },
+      {
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 137,
+        "end": 145
+      },
+      {
+        "text": "Singapore",
+        "label": "GPE",
+        "start": 147,
+        "end": 156
+      },
+      {
+        "text": "Thailand",
+        "label": "GPE",
+        "start": 162,
+        "end": 170
+      },
+      {
+        "text": "end of 2027",
+        "label": "DATE",
+        "start": 226,
+        "end": 237
+      }
+    ],
+    "notes": "Multiple GPE entities. Date with full format.",
+    "difficulty": "easy"
+  },
+  {
+    "id": "eval_005",
+    "source": "Maybank Foundation",
+    "title": "Maybank Foundation awards scholarships to 500 students",
+    "body": "Maybank Foundation today awarded scholarships worth RM10 million to 500 university students across ASEAN during a ceremony at Menara Maybank, Kuala Lumpur. Maybank Foundation chairperson Dato Mohaiyani Shamsudin handed the awards to recipients from Malaysia, Indonesia, and the Philippines.",
+    "gold_entities": [
+      {
+        "text": "Maybank Foundation",
+        "label": "ORG",
+        "start": 0,
+        "end": 18
+      },
+      {
+        "text": "RM10 million",
+        "label": "MONEY",
+        "start": 51,
+        "end": 63
+      },
+      {
+        "text": "ASEAN",
+        "label": "ORG",
+        "start": 99,
+        "end": 104
+      },
+      {
+        "text": "Menara Maybank",
+        "label": "LOC",
+        "start": 124,
+        "end": 138
+      },
+      {
+        "text": "Kuala Lumpur",
+        "label": "GPE",
+        "start": 140,
+        "end": 152
+      },
+      {
+        "text": "Dato Mohaiyani Shamsudin",
+        "label": "PERSON",
+        "start": 185,
+        "end": 209
+      },
+      {
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 241,
+        "end": 249
+      },
+      {
+        "text": "Indonesia",
+        "label": "GPE",
+        "start": 251,
+        "end": 260
+      },
+      {
+        "text": "the Philippines",
+        "label": "GPE",
+        "start": 266,
+        "end": 281
+      }
+    ],
+    "notes": "ASEAN can be ORG or NORP; Menara Maybank is a building (LOC).",
+    "difficulty": "hard"
+  },
+  {
+    "id": "eval_006",
+    "source": "MDV",
+    "title": "MDV approves RM500 million in venture funding for tech startups",
+    "body": "Malaysia Venture Capital Management Berhad (MDV) has approved RM500 million in venture capital funding for technology startups in Malaysia for the fiscal year 2026-2027. The announcement was made by Minister of Finance II Datuk Seri Ahmad Maslan during the National Budget Forum in Putrajaya.",
+    "gold_entities": [
+      {
+        "text": "Malaysia Venture Capital Management Berhad",
+        "label": "ORG",
+        "start": 0,
+        "end": 42
+      },
+      {
+        "text": "MDV",
+        "label": "ORG",
+        "start": 44,
+        "end": 47
+      },
+      {
+        "text": "RM500 million",
+        "label": "MONEY",
+        "start": 61,
+        "end": 74
+      },
+      {
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 137,
+        "end": 145
+      },
+      {
+        "text": "2026-2027",
+        "label": "DATE",
+        "start": 162,
+        "end": 171
+      },
+      {
+        "text": "Datuk Seri Ahmad Maslan",
+        "label": "PERSON",
+        "start": 221,
+        "end": 244
+      },
+      {
+        "text": "National Budget Forum",
+        "label": "EVENT",
+        "start": 252,
+        "end": 273
+      },
+      {
+        "text": "Putrajaya",
+        "label": "GPE",
+        "start": 277,
+        "end": 286
+      }
+    ],
+    "notes": "Long official org name with acronym. Fiscal year range as DATE.",
+    "difficulty": "medium"
+  },
+  {
+    "id": "eval_007",
+    "source": "Maybank CSR",
+    "title": "Maybank launches Go Green initiative to plant 100,000 trees",
+    "body": "As part of its corporate social responsibility (CSR) commitments, Maybank launched the Go Green initiative in partnership with WWF-Malaysia and the Ministry of Natural Resources and Environment. The programme targets planting 100,000 trees across Peninsular Malaysia, Sabah, and Sarawak by December 2026.",
+    "gold_entities": [
+      {
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 65,
+        "end": 72
+      },
+      {
+        "text": "WWF-Malaysia",
+        "label": "ORG",
+        "start": 120,
+        "end": 132
+      },
+      {
+        "text": "Ministry of Natural Resources and Environment",
+        "label": "ORG",
+        "start": 141,
+        "end": 186
+      },
+      {
+        "text": "Peninsular Malaysia",
+        "label": "GPE",
+        "start": 245,
+        "end": 264
+      },
+      {
+        "text": "Sabah",
+        "label": "GPE",
+        "start": 266,
+        "end": 271
+      },
+      {
+        "text": "Sarawak",
+        "label": "GPE",
+        "start": 277,
+        "end": 284
+      },
+      {
+        "text": "December 2026",
+        "label": "DATE",
+        "start": 289,
+        "end": 302
+      }
+    ],
+    "notes": "Hyphenated org name. Malaysian geographic regions.",
+    "difficulty": "medium"
+  },
+  {
+    "id": "eval_008",
+    "source": "CIMB Group Malaysia",
+    "title": "Banking sector outlook remains stable amid global headwinds",
+    "body": "The Malaysian banking sector continues to demonstrate resilience amid global economic headwinds, according to a report released by the International Monetary Fund (IMF) on October 2026. Capital adequacy ratios remain well above regulatory minimums, and non-performing loan ratios stayed at historical lows.",
+    "gold_entities": [
+      {
+        "text": "International Monetary Fund",
+        "label": "ORG",
+        "start": 143,
+        "end": 169
+      },
+      {
+        "text": "IMF",
+        "label": "ORG",
+        "start": 171,
+        "end": 174
+      },
+      {
+        "text": "October 2026",
+        "label": "DATE",
+        "start": 179,
+        "end": 191
+      }
+    ],
+    "notes": "Challenging: minimal named entities. Tests recall (false negatives).",
+    "difficulty": "hard"
+  },
+  {
+    "id": "eval_009",
+    "source": "Maybank Group",
+    "title": "Maybank appoints new Group CFO effective January 2027",
+    "body": "Maybank today announced the appointment of Encik Amirul Feisal Wan Zahir as the new Group Chief Financial Officer (CFO), effective 1 January 2027. Amirul Feisal replaces Datuk Fadzillah Kamaruddin who will retire after 20 years of service. Amirul Feisal previously served as the CFO of Maybank Islamic.",
+    "gold_entities": [
+      {
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7
+      },
+      {
+        "text": "Encik Amirul Feisal Wan Zahir",
+        "label": "PERSON",
+        "start": 43,
+        "end": 72
+      },
+      {
+        "text": "1 January 2027",
+        "label": "DATE",
+        "start": 128,
+        "end": 142
+      },
+      {
+        "text": "Amirul Feisal",
+        "label": "PERSON",
+        "start": 144,
+        "end": 157
+      },
+      {
+        "text": "Datuk Fadzillah Kamaruddin",
+        "label": "PERSON",
+        "start": 168,
+        "end": 194
+      },
+      {
+        "text": "Maybank Islamic",
+        "label": "ORG",
+        "start": 287,
+        "end": 302
+      }
+    ],
+    "notes": "Same entity (Amirul Feisal) appears multiple times with different form.",
+    "difficulty": "hard"
+  },
+  {
+    "id": "eval_010",
+    "source": "Public Bank Berhad",
+    "title": "Public Bank reports steady growth in home loan portfolio",
+    "body": "Public Bank Berhad (PBB) recorded a 5.2% increase in its home loan portfolio to RM180 billion as of September 2026, driven by demand in the Klang Valley and Johor. The bank maintained its net interest margin at 2.1% despite competitive pressures.",
+    "gold_entities": [
+      {
+        "text": "Public Bank Berhad",
+        "label": "ORG",
+        "start": 0,
+        "end": 18
+      },
+      {
+        "text": "PBB",
+        "label": "ORG",
+        "start": 20,
+        "end": 23
+      },
+      {
+        "text": "RM180 billion",
+        "label": "MONEY",
+        "start": 80,
+        "end": 93
+      },
+      {
+        "text": "September 2026",
+        "label": "DATE",
+        "start": 101,
+        "end": 115
+      },
+      {
+        "text": "Klang Valley",
+        "label": "GPE",
+        "start": 143,
+        "end": 155
+      },
+      {
+        "text": "Johor",
+        "label": "GPE",
+        "start": 160,
+        "end": 165
+      }
+    ],
+    "notes": "Malaysian geographic names. Abbreviation ORG.",
+    "difficulty": "easy"
+  }
+]

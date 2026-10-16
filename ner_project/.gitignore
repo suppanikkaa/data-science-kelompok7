@@ -1,0 +1,26 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+*.log
+
+# Environments
+venv/
+env/
+.venv/
+ner_project_venv/
+
+# Datasets & raw clipping articles (Do not commit raw articles - study_case.pdf requirement)
+*.csv
+drive-download*/
+clipping-information.txt
+data/*.csv
+data/annotations.jsonl
+
+# OS & IDE metadata
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

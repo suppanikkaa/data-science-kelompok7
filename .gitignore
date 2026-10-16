@@ -1,0 +1,19 @@
+# Python & environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+ner_project_venv/
+venv/
+.venv/
+*.log
+
+# Raw dataset files
+drive-download*/
+*.csv
+clipping-information.txt
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
