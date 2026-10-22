@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kelompok 7 &bull; Model &amp; Evaluation</title>
+  <meta name="description" content="Model card and held-out evaluation summary for the Kelompok 7 NER service."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #09090b;
+      --surface: #121215;
+      --surface-elevated: #18181b;
+      --surface-hover: #222226;
+      --border: #27272a;
+      --border-light: #3f3f46;
+      --border-bright: #71717a;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --text-dim: #71717a;
+      --white: #ffffff;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(9,9,11,0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+    }
+
+    .header-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand { display: flex; align-items: center; gap: 0.8rem; }
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      background: var(--white);
+      color: #000;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand h1 { font-size: 1rem; letter-spacing: -0.02em; }
+    .brand p { color: var(--text-muted); font-size: 0.72rem; }
+
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid var(--border-light);
+      border-radius: 9999px;
+      padding: 0.35rem 0.8rem;
+      background: var(--surface);
+      white-space: nowrap;
+    }
+
+    .back-link:hover { color: var(--white); border-color: var(--border-bright); }
+
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 2.2rem 1.5rem 3rem;
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.65rem;
+    }
+
+    .hero h2 {
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.045em;
+      font-weight: 800;
+      margin-bottom: 0.7rem;
+    }
+
+    .lede {
+      max-width: 800px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.2rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.7rem;
+      border: 1px solid var(--border-light);
+      border-radius: 9999px;
+      background: var(--surface);
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .pill.ok { color: #d4d4d8; border-color: #52525b; }
+    .pill.warn { color: #fbbf24; border-color: #78350f; background: #1c1410; }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .notice {
+      margin-top: 1.25rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid #78350f;
+      background: #1c1410;
+      color: #fbbf24;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+      margin-top: 1.6rem;
+    }
+
+    .kpi, .card {
+      background: rgba(18,18,21,0.92);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .kpi { padding: 1rem 1.05rem; }
+
+    .kpi-label {
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      min-height: 1rem;
+    }
+
+    .kpi-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.65rem;
+      letter-spacing: -0.04em;
+      margin-top: 0.35rem;
+      color: var(--white);
+    }
+
+    .kpi-note {
+      color: var(--text-muted);
+      font-size: 0.74rem;
+      margin-top: 0.25rem;
+    }
+
+    .card { padding: 1.15rem 1.2rem; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+      margin-top: 0.85rem;
+    }
+
+    .card h3 {
+      font-size: 0.9rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .tag {
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.64rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: minmax(120px, 0.8fr) minmax(0, 1.2fr);
+      gap: 0.45rem 1rem;
+      font-size: 0.82rem;
+    }
+
+    .facts dt { color: var(--text-muted); }
+    .facts dd { color: var(--text); overflow-wrap: anywhere; }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78em;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.08rem 0.28rem;
+      color: #e4e4e7;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th, td { padding: 0.48rem 0.55rem; border-bottom: 1px solid var(--border); text-align: left; }
+    th { color: var(--text-dim); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.64rem; white-space: nowrap; }
+    td.num, th.num { text-align: right; font-family: 'JetBrains Mono', monospace; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tr.weak td { color: #fbbf24; }
+    tr.selected-row td { background: rgba(255,255,255,0.035); }
+
+    .mini {
+      margin-left: 0.4rem;
+      color: #d4d4d8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .muted { color: var(--text-muted); font-size: 0.78rem; margin-top: 0.65rem; }
+
+    .limitations { padding-left: 1.1rem; color: var(--text-muted); font-size: 0.82rem; }
+    .limitations li { margin-bottom: 0.42rem; }
+    .limitations li::marker { color: var(--text-dim); }
+
+    .source {
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem;
+      margin-top: 1rem;
+      overflow-wrap: anywhere;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 1.5rem 2rem;
+      color: var(--text-dim);
+      font-size: 0.72rem;
+    }
+
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--white); }
+
+    @media (max-width: 900px) {
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      header { padding: 0.85rem 1rem; }
+      .brand p { display: none; }
+      main { padding: 1.6rem 1rem 2.5rem; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .facts { grid-template-columns: 1fr; gap: 0.15rem; }
+      .facts dd { margin-bottom: 0.45rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-logo">7</div>
+      <div>
+        <h1>Kelompok 7 &bull; NER</h1>
+        <p>Model &amp; evaluation card</p>
+      </div>
+    </div>
+    <a class="back-link" href="/">&larr; NER Panel</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">Model Card &middot; Kelompok 7</div>
+    <h2>Model &amp; Evaluation</h2>
+    <p class="lede">
+      Traceable summary of the fine-tuned NER pipeline, held-out evaluation, dataset
+      profile, and human-review status. This page reads the project JSON artifacts and
+      never displays full article text.
+    </p>
+    <div class="pill-row">
+      <span class="pill"><span class="dot"></span>{{ model_name }}</span>
+      <span class="pill {{ 'ok' if all_human_reviewed else 'warn' }}">{{ review_label }}</span>
+      <span class="pill">{{ examples_count }} excerpts &middot; {{ gold_spans }} spans</span>
+      <span class="pill">max {{ max_text_length }} chars</span>
+    </div>
+  </section>
+
+  {% if not has_reports %}
+  <div class="notice">
+    Evaluation artifacts were not found or could not be read. The NER panel and
+    <code>/health</code> still work, but this summary is incomplete.
+  </div>
+  {% endif %}
+
+  <section class="kpi-grid" aria-label="Evaluation summary">
+    <div class="kpi">
+      <div class="kpi-label">Held-out test F1</div>
+      <div class="kpi-value">{{ test_f1 }}</div>
+      <div class="kpi-note">{{ delta_f1 }} vs baseline</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Baseline F1</div>
+      <div class="kpi-value">{{ baseline_f1 }}</div>
+      <div class="kpi-note">P {{ baseline_precision }} &middot; R {{ baseline_recall }}</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Validation F1</div>
+      <div class="kpi-value">{{ validation_f1 }}</div>
+      <div class="kpi-note">weak-label agreement</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Test precision / recall</div>
+      <div class="kpi-value">{{ test_precision }} / {{ test_recall }}</div>
+      <div class="kpi-note">exact-span + label</div>
+    </div>
+  </section>
+
+  <div class="two-col">
+    <section class="card">
+      <h3>Selected model</h3>
+      <dl class="facts">
+        <dt>Service model</dt><dd><code>{{ model_name }}</code></dd>
+        <dt>Base model</dt><dd>{{ base_model }} {{ base_model_version }}</dd>
+        <dt>spaCy</dt><dd>{{ spacy_version }}</dd>
+        <dt>Configuration</dt><dd><code>{{ selected_config }}</code></dd>
+        <dt>Selected epoch</dt><dd>{{ selected_epoch }}</dd>
+        <dt>Seed</dt><dd>{{ seed }}</dd>
+        <dt>Training time</dt><dd>{{ training_seconds }} s selected &middot; {{ training_seconds_total }} s total</dd>
+      </dl>
+    </section>
+
+    <section class="card">
+      <h3>Evaluation provenance</h3>
+      <dl class="facts">
+        <dt>Review status</dt><dd>{{ review_label }}</dd>
+        <dt>Reviewer</dt><dd>{{ reviewer }}</dd>
+        <dt>Reviewed at</dt><dd>{{ reviewed_at }}</dd>
+        <dt>Examples</dt><dd>{{ examples_count }} excerpts &middot; {{ entity_rich }} entity-rich &middot; {{ negative_control }} negative control</dd>
+        <dt>Gold spans</dt><dd>{{ gold_spans }}</dd>
+        <dt>Dataset</dt><dd>{{ raw_rows }} raw rows &rarr; {{ unique_rows }} unique &middot; {{ english_rows }} English</dd>
+      </dl>
+      <p class="muted">
+        The test metrics use the signed-off evaluation set. They are a small-sample
+        estimate, not a production benchmark.
+      </p>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:0.85rem;">
+    <div class="section-head">
+      <h3>Per-label performance</h3>
+      <span class="tag">exact-span + exact-label</span>
+    </div>
+    {% if per_label_rows %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Label</th>
+            <th class="num">Precision</th>
+            <th class="num">Recall</th>
+            <th class="num">F1</th>
+            <th class="num">Support</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in per_label_rows %}
+          <tr class="{{ 'weak' if row.weak else '' }}">
+            <td><code>{{ row.label }}</code></td>
+            <td class="num">{{ row.precision }}</td>
+            <td class="num">{{ row.recall }}</td>
+            <td class="num">{{ row.f1 }}</td>
+            <td class="num">{{ row.support }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">Rows in amber have F1 below 0.50. Rare-label estimates are noisy.</p>
+    {% else %}
+    <p class="muted">No per-label evaluation report is available.</p>
+    {% endif %}
+  </section>
+
+  <div class="two-col">
+    <section class="card">
+      <h3>Dataset &amp; split</h3>
+      <table>
+        <tbody>
+          <tr><th>Raw rows</th><td class="num">{{ raw_rows }}</td></tr>
+          <tr><th>Unique after deduplication</th><td class="num">{{ unique_rows }}</td></tr>
+          <tr><th>Exact duplicates removed</th><td class="num">{{ duplicates }}</td></tr>
+          <tr><th>English articles used</th><td class="num">{{ english_rows }}</td></tr>
+          <tr><th>Near-duplicate clusters</th><td class="num">{{ near_duplicate_clusters }}</td></tr>
+          <tr><th>Multi-document clusters</th><td class="num">{{ near_duplicate_multi }}</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:0.8rem;">
+        <thead>
+          <tr><th>Split</th><th class="num">Documents</th><th class="num">Clusters</th><th class="num">Weak spans</th></tr>
+        </thead>
+        <tbody>
+          {% for row in split_rows %}
+          <tr>
+            <td>{{ row.label }}</td>
+            <td class="num">{{ row.documents }}</td>
+            <td class="num">{{ row.clusters }}</td>
+            <td class="num">{{ row.spans }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3>Validation tuning</h3>
+      {% if tuning_rows %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Configuration</th><th class="num">Best epoch</th><th class="num">Val P</th><th class="num">Val R</th><th class="num">Val F1</th></tr>
+          </thead>
+          <tbody>
+            {% for row in tuning_rows %}
+            <tr class="{{ 'selected-row' if row.selected else '' }}">
+              <td><code>{{ row.name }}</code>{% if row.selected %}<span class="mini">selected</span>{% endif %}</td>
+              <td class="num">{{ row.epoch }}</td>
+              <td class="num">{{ row.precision }}</td>
+              <td class="num">{{ row.recall }}</td>
+              <td class="num">{{ row.f1 }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">The test split was not used for model selection.</p>
+      {% else %}
+      <p class="muted">No validation-tuning report is available.</p>
+      {% endif %}
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:0.85rem;">
+    <h3>Known limitations</h3>
+    <ul class="limitations">
+      {% for item in limitations %}
+      <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <p class="source">
+    Source artifacts: data/training_report.json &middot; data/evaluation_report.json &middot;
+    data/evaluation_examples.json. No article text is exposed by this page.
+  </p>
+</main>
+
+<footer>
+  <a href="/">&larr; Back to NER panel</a> &nbsp;&middot;&nbsp;
+  <a href="/health">/health</a>
+</footer>
+
+</body>
+</html>

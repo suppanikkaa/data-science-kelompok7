@@ -17,7 +17,6 @@ ner_project_venv/
 drive-download*/
 clipping-information.txt
 data/*.csv
-data/annotations.jsonl
 
 # OS & IDE metadata
 .DS_Store
@@ -26,5 +25,4 @@ Thumbs.db
 .vscode/
 
 # Additional sensitive files
-*.pdf
 *.txt

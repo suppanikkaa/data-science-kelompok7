@@ -1,395 +1,20 @@
 [
   {
     "id": "eval_001",
-    "source": "Maybank Group",
-    "title": "Maybank posts higher net profit of RM2.5b in Q3 2026",
-    "body": "Kuala Lumpur: Maybank Group reported a net profit of RM2.5 billion for the third quarter of 2026, up 8% from the same period last year. Group president and CEO Datuk Khairussaleh Ramli said the growth was driven by strong loan growth and improved asset quality. The bank's total assets grew to RM1.2 trillion.",
-    "gold_entities": [
-      {
-        "text": "Maybank Group",
-        "label": "ORG",
-        "start": 0,
-        "end": 13
-      },
-      {
-        "text": "RM2.5 billion",
-        "label": "MONEY",
-        "start": 60,
-        "end": 73
-      },
-      {
-        "text": "third quarter of 2026",
-        "label": "DATE",
-        "start": 82,
-        "end": 103
-      },
-      {
-        "text": "Datuk Khairussaleh Ramli",
-        "label": "PERSON",
-        "start": 155,
-        "end": 179
-      },
-      {
-        "text": "RM1.2 trillion",
-        "label": "MONEY",
-        "start": 252,
-        "end": 266
-      },
-      {
-        "text": "Kuala Lumpur",
-        "label": "GPE",
-        "start": 0,
-        "end": 12
-      }
-    ],
-    "notes": "Standard financial news. Clear ORG, PERSON, MONEY, DATE entities.",
-    "difficulty": "easy"
-  },
-  {
-    "id": "eval_002",
-    "source": "CIMB Group Malaysia",
-    "title": "CIMB Group wins Best Bank in Malaysia award at Euromoney Awards",
-    "body": "CIMB Group has been named the Best Bank in Malaysia at the Euromoney Awards for Excellence 2026, held in London. This marks the third consecutive year CIMB has received this recognition. Group CEO Tengku Datuk Seri Zafrul Abdul Aziz said the award reflects the bank's transformation journey.",
-    "gold_entities": [
-      {
-        "text": "CIMB Group",
-        "label": "ORG",
-        "start": 0,
-        "end": 10
-      },
-      {
-        "text": "Malaysia",
-        "label": "GPE",
-        "start": 32,
-        "end": 40
-      },
-      {
-        "text": "Euromoney Awards for Excellence 2026",
-        "label": "EVENT",
-        "start": 55,
-        "end": 91
-      },
-      {
-        "text": "London",
-        "label": "GPE",
-        "start": 101,
-        "end": 107
-      },
-      {
-        "text": "Tengku Datuk Seri Zafrul Abdul Aziz",
-        "label": "PERSON",
-        "start": 192,
-        "end": 227
-      }
-    ],
-    "notes": "Award event entity; noble title before person name (ambiguous).",
-    "difficulty": "medium"
-  },
-  {
-    "id": "eval_003",
-    "source": "Hong Leong Bank",
-    "title": "Hong Leong Bank launches digital banking platform HLB Connect",
-    "body": "Hong Leong Bank Berhad (HLB) today launched HLB Connect, its revamped digital banking platform, at its headquarters in Kuala Lumpur. The launch was attended by Bank Negara Malaysia deputy governor Jessica Chew and more than 200 industry guests.",
-    "gold_entities": [
-      {
-        "text": "Hong Leong Bank Berhad",
-        "label": "ORG",
-        "start": 0,
-        "end": 22
-      },
-      {
-        "text": "HLB",
-        "label": "ORG",
-        "start": 24,
-        "end": 27
-      },
-      {
-        "text": "HLB Connect",
-        "label": "ORG",
-        "start": 44,
-        "end": 55
-      },
-      {
-        "text": "Kuala Lumpur",
-        "label": "GPE",
-        "start": 117,
-        "end": 129
-      },
-      {
-        "text": "Bank Negara Malaysia",
-        "label": "ORG",
-        "start": 159,
-        "end": 179
-      },
-      {
-        "text": "Jessica Chew",
-        "label": "PERSON",
-        "start": 196,
-        "end": 208
-      }
-    ],
-    "notes": "Abbreviation ORG and product name ORG. Ambiguous 'HLB Connect'.",
-    "difficulty": "medium"
-  },
-  {
-    "id": "eval_004",
-    "source": "RHB Bank",
-    "title": "RHB Bank partners with Grab for SME financing solutions",
-    "body": "RHB Bank and Grab Financial Group announced a strategic partnership on 15 September 2026 to offer SME financing solutions across Malaysia, Singapore, and Thailand. The collaboration aims to serve 100,000 small businesses by end of 2027.",
-    "gold_entities": [
-      {
-        "text": "RHB Bank",
-        "label": "ORG",
-        "start": 0,
-        "end": 8
-      },
-      {
-        "text": "Grab Financial Group",
-        "label": "ORG",
-        "start": 25,
-        "end": 45
-      },
-      {
-        "text": "15 September 2026",
-        "label": "DATE",
-        "start": 78,
-        "end": 95
-      },
-      {
-        "text": "Malaysia",
-        "label": "GPE",
-        "start": 137,
-        "end": 145
-      },
-      {
-        "text": "Singapore",
-        "label": "GPE",
-        "start": 147,
-        "end": 156
-      },
-      {
-        "text": "Thailand",
-        "label": "GPE",
-        "start": 162,
-        "end": 170
-      },
-      {
-        "text": "end of 2027",
-        "label": "DATE",
-        "start": 226,
-        "end": 237
-      }
-    ],
-    "notes": "Multiple GPE entities. Date with full format.",
-    "difficulty": "easy"
-  },
-  {
-    "id": "eval_005",
-    "source": "Maybank Foundation",
-    "title": "Maybank Foundation awards scholarships to 500 students",
-    "body": "Maybank Foundation today awarded scholarships worth RM10 million to 500 university students across ASEAN during a ceremony at Menara Maybank, Kuala Lumpur. Maybank Foundation chairperson Dato Mohaiyani Shamsudin handed the awards to recipients from Malaysia, Indonesia, and the Philippines.",
-    "gold_entities": [
-      {
-        "text": "Maybank Foundation",
-        "label": "ORG",
-        "start": 0,
-        "end": 18
-      },
-      {
-        "text": "RM10 million",
-        "label": "MONEY",
-        "start": 51,
-        "end": 63
-      },
-      {
-        "text": "ASEAN",
-        "label": "ORG",
-        "start": 99,
-        "end": 104
-      },
-      {
-        "text": "Menara Maybank",
-        "label": "LOC",
-        "start": 124,
-        "end": 138
-      },
-      {
-        "text": "Kuala Lumpur",
-        "label": "GPE",
-        "start": 140,
-        "end": 152
-      },
-      {
-        "text": "Dato Mohaiyani Shamsudin",
-        "label": "PERSON",
-        "start": 185,
-        "end": 209
-      },
-      {
-        "text": "Malaysia",
-        "label": "GPE",
-        "start": 241,
-        "end": 249
-      },
-      {
-        "text": "Indonesia",
-        "label": "GPE",
-        "start": 251,
-        "end": 260
-      },
-      {
-        "text": "the Philippines",
-        "label": "GPE",
-        "start": 266,
-        "end": 281
-      }
-    ],
-    "notes": "ASEAN can be ORG or NORP; Menara Maybank is a building (LOC).",
-    "difficulty": "hard"
-  },
-  {
-    "id": "eval_006",
-    "source": "MDV",
-    "title": "MDV approves RM500 million in venture funding for tech startups",
-    "body": "Malaysia Venture Capital Management Berhad (MDV) has approved RM500 million in venture capital funding for technology startups in Malaysia for the fiscal year 2026-2027. The announcement was made by Minister of Finance II Datuk Seri Ahmad Maslan during the National Budget Forum in Putrajaya.",
-    "gold_entities": [
-      {
-        "text": "Malaysia Venture Capital Management Berhad",
-        "label": "ORG",
-        "start": 0,
-        "end": 42
-      },
-      {
-        "text": "MDV",
-        "label": "ORG",
-        "start": 44,
-        "end": 47
-      },
-      {
-        "text": "RM500 million",
-        "label": "MONEY",
-        "start": 61,
-        "end": 74
-      },
-      {
-        "text": "Malaysia",
-        "label": "GPE",
-        "start": 137,
-        "end": 145
-      },
-      {
-        "text": "2026-2027",
-        "label": "DATE",
-        "start": 162,
-        "end": 171
-      },
-      {
-        "text": "Datuk Seri Ahmad Maslan",
-        "label": "PERSON",
-        "start": 221,
-        "end": 244
-      },
-      {
-        "text": "National Budget Forum",
-        "label": "EVENT",
-        "start": 252,
-        "end": 273
-      },
-      {
-        "text": "Putrajaya",
-        "label": "GPE",
-        "start": 277,
-        "end": 286
-      }
-    ],
-    "notes": "Long official org name with acronym. Fiscal year range as DATE.",
-    "difficulty": "medium"
-  },
-  {
-    "id": "eval_007",
-    "source": "Maybank CSR",
-    "title": "Maybank launches Go Green initiative to plant 100,000 trees",
-    "body": "As part of its corporate social responsibility (CSR) commitments, Maybank launched the Go Green initiative in partnership with WWF-Malaysia and the Ministry of Natural Resources and Environment. The programme targets planting 100,000 trees across Peninsular Malaysia, Sabah, and Sarawak by December 2026.",
-    "gold_entities": [
-      {
-        "text": "Maybank",
-        "label": "ORG",
-        "start": 65,
-        "end": 72
-      },
-      {
-        "text": "WWF-Malaysia",
-        "label": "ORG",
-        "start": 120,
-        "end": 132
-      },
-      {
-        "text": "Ministry of Natural Resources and Environment",
-        "label": "ORG",
-        "start": 141,
-        "end": 186
-      },
-      {
-        "text": "Peninsular Malaysia",
-        "label": "GPE",
-        "start": 245,
-        "end": 264
-      },
-      {
-        "text": "Sabah",
-        "label": "GPE",
-        "start": 266,
-        "end": 271
-      },
-      {
-        "text": "Sarawak",
-        "label": "GPE",
-        "start": 277,
-        "end": 284
-      },
-      {
-        "text": "December 2026",
-        "label": "DATE",
-        "start": 289,
-        "end": 302
-      }
-    ],
-    "notes": "Hyphenated org name. Malaysian geographic regions.",
-    "difficulty": "medium"
-  },
-  {
-    "id": "eval_008",
-    "source": "CIMB Group Malaysia",
-    "title": "Banking sector outlook remains stable amid global headwinds",
-    "body": "The Malaysian banking sector continues to demonstrate resilience amid global economic headwinds, according to a report released by the International Monetary Fund (IMF) on October 2026. Capital adequacy ratios remain well above regulatory minimums, and non-performing loan ratios stayed at historical lows.",
-    "gold_entities": [
-      {
-        "text": "International Monetary Fund",
-        "label": "ORG",
-        "start": 143,
-        "end": 169
-      },
-      {
-        "text": "IMF",
-        "label": "ORG",
-        "start": 171,
-        "end": 174
-      },
-      {
-        "text": "October 2026",
-        "label": "DATE",
-        "start": 179,
-        "end": 191
-      }
-    ],
-    "notes": "Challenging: minimal named entities. Tests recall (false negatives).",
-    "difficulty": "hard"
-  },
-  {
-    "id": "eval_009",
-    "source": "Maybank Group",
-    "title": "Maybank appoints new Group CFO effective January 2027",
-    "body": "Maybank today announced the appointment of Encik Amirul Feisal Wan Zahir as the new Group Chief Financial Officer (CFO), effective 1 January 2027. Amirul Feisal replaces Datuk Fadzillah Kamaruddin who will retire after 20 years of service. Amirul Feisal previously served as the CFO of Maybank Islamic.",
+    "original_id": "31fb6fd395f5c4ff54ee6256aa1233f3458a492150a19296bf18e069f420174c",
+    "source_row": 147,
+    "source_name": "nst.com.my",
+    "date_published": "11/09/2026 13.25.04",
+    "clipping": "Maybank CSR",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0122",
+    "title": "Maybank completes Maybank Ageas buyout",
+    "body": "KUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of the remaining 30.95 per cent stake in Maybank Ageas Holdings Bhd. This gives the banking group full ownership of the holding company for its Etiqa insurance and takaful business in Malaysia and Singapore. The transaction follows Maybank's share purchase agreement with Ageas Insurance International NV on Sept 8 and regulatory approval from Bank Negara Malaysia received on Sept 1.",
+    "excerpt_provenance": {
+      "body_start_char": 0,
+      "body_end_char": 458,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
     "gold_entities": [
       {
         "text": "Maybank",
@@ -398,83 +23,1011 @@
         "end": 7
       },
       {
-        "text": "Encik Amirul Feisal Wan Zahir",
-        "label": "PERSON",
-        "start": 43,
-        "end": 72
-      },
-      {
-        "text": "1 January 2027",
-        "label": "DATE",
-        "start": 128,
-        "end": 142
-      },
-      {
-        "text": "Amirul Feisal",
-        "label": "PERSON",
-        "start": 144,
-        "end": 157
-      },
-      {
-        "text": "Datuk Fadzillah Kamaruddin",
-        "label": "PERSON",
-        "start": 168,
-        "end": 194
-      },
-      {
-        "text": "Maybank Islamic",
+        "text": "Maybank Ageas",
         "label": "ORG",
-        "start": 287,
-        "end": 302
+        "start": 18,
+        "end": 31
+      },
+      {
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 40,
+        "end": 52
+      },
+      {
+        "text": "Malayan Banking Bhd",
+        "label": "ORG",
+        "start": 54,
+        "end": 73
+      },
+      {
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 75,
+        "end": 82
+      },
+      {
+        "text": "Maybank Ageas Holdings Bhd",
+        "label": "ORG",
+        "start": 155,
+        "end": 181
+      },
+      {
+        "text": "Etiqa",
+        "label": "ORG",
+        "start": 258,
+        "end": 263
+      },
+      {
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 298,
+        "end": 306
+      },
+      {
+        "text": "Singapore",
+        "label": "GPE",
+        "start": 311,
+        "end": 320
+      },
+      {
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 346,
+        "end": 353
+      },
+      {
+        "text": "Ageas Insurance International NV",
+        "label": "ORG",
+        "start": 386,
+        "end": 418
+      },
+      {
+        "text": "Sept 8",
+        "label": "DATE",
+        "start": 422,
+        "end": 428
+      },
+      {
+        "text": "Bank Negara Malaysia",
+        "label": "ORG",
+        "start": 458,
+        "end": 478
+      },
+      {
+        "text": "Sept 1",
+        "label": "DATE",
+        "start": 491,
+        "end": 497
       }
     ],
-    "notes": "Same entity (Amirul Feisal) appears multiple times with different form.",
-    "difficulty": "hard"
+    "notes": "Parenthesised acronym, legal suffixes, repeated Maybank mentions, dates with abbreviations.",
+    "difficulty": "medium",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
   },
   {
-    "id": "eval_010",
-    "source": "Public Bank Berhad",
-    "title": "Public Bank reports steady growth in home loan portfolio",
-    "body": "Public Bank Berhad (PBB) recorded a 5.2% increase in its home loan portfolio to RM180 billion as of September 2026, driven by demand in the Klang Valley and Johor. The bank maintained its net interest margin at 2.1% despite competitive pressures.",
+    "id": "eval_002",
+    "original_id": "93de5ae7354705e4419481955201e53e08ae3ba72d9fd928b1772a403e37589b",
+    "source_row": 59,
+    "source_name": "fintechnews.my",
+    "date_published": "01/10/2026 11.44.40",
+    "clipping": "Hong Leong Bank",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0297",
+    "title": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards",
+    "body": "Bursa Malaysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The inaugural Bursa Malaysia IR Awards 2026 took place on 4 September. Maybank received four honours, including Best CEO in Investor Relations for its President and Group CEO Khairussaleh. The bank also won Best Company in Investor Relations overall, Best Financial Reporting and Best Large-cap Company in Investor Relations for Financial Services. Malkit won Best CFO in Investor Relations. Hong Leong Bank also ranked among the top three performers in the large-cap financial services category, according to the bank.",
+    "excerpt_provenance": {
+      "body_start_char": 0,
+      "body_end_char": 653,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
     "gold_entities": [
       {
-        "text": "Public Bank Berhad",
+        "text": "Maybank",
         "label": "ORG",
         "start": 0,
-        "end": 18
+        "end": 7
       },
       {
-        "text": "PBB",
+        "text": "Hong Leong",
         "label": "ORG",
-        "start": 20,
-        "end": 23
+        "start": 9,
+        "end": 19
       },
       {
-        "text": "RM180 billion",
-        "label": "MONEY",
-        "start": 80,
-        "end": 93
+        "text": "Bursa Malaysia Awards",
+        "label": "EVENT",
+        "start": 52,
+        "end": 73
       },
       {
-        "text": "September 2026",
+        "text": "Bursa Malaysia",
+        "label": "ORG",
+        "start": 75,
+        "end": 89
+      },
+      {
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 129,
+        "end": 136
+      },
+      {
+        "text": "Dato’ Sri Khairussaleh Ramli",
+        "label": "PERSON",
+        "start": 139,
+        "end": 167
+      },
+      {
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 172,
+        "end": 187
+      },
+      {
+        "text": "Malkit Singh Maan",
+        "label": "PERSON",
+        "start": 190,
+        "end": 207
+      },
+      {
+        "text": "Bursa Malaysia IR Awards 2026",
+        "label": "EVENT",
+        "start": 223,
+        "end": 252
+      },
+      {
+        "text": "4 September",
         "label": "DATE",
-        "start": 101,
+        "start": 267,
+        "end": 278
+      },
+      {
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 280,
+        "end": 287
+      },
+      {
+        "text": "Khairussaleh",
+        "label": "PERSON",
+        "start": 384,
+        "end": 396
+      },
+      {
+        "text": "Malkit",
+        "label": "PERSON",
+        "start": 558,
+        "end": 564
+      },
+      {
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 601,
+        "end": 616
+      }
+    ],
+    "notes": "Possessive apostrophes, honorifics, repeated company and person names, awards event.",
+    "difficulty": "medium",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
+  },
+  {
+    "id": "eval_003",
+    "original_id": "a26427d94be0bb94fd01acff7c92b4971f7a923cc89284be1708af31583c9713",
+    "source_row": 338,
+    "source_name": "nst.com.my",
+    "date_published": "10/09/2026 10.40.39",
+    "clipping": "CIMB Group Malaysia",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0331",
+    "title": "CIMB Securities lifts 2026 GDP growth forecast to 5pct on domestic strength",
+    "body": "KUALA LUMPUR: CIMB Securities Research has raised its forecast for Malaysia's 2026 gross domestic product (GDP) growth to five per cent from 4.8 per cent previously, backed by stronger-than-expected domestic activity. \"Following the weaker-than-expected July Industrial Production Index (IPI) outturn, the third quarter (Q3) 2026 GDP nowcast has edged down to 5.0 per cent from 5.2 per cent,\" it said in a note.",
+    "excerpt_provenance": {
+      "body_start_char": 0,
+      "body_end_char": 411,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
+    "gold_entities": [
+      {
+        "text": "CIMB Securities",
+        "label": "ORG",
+        "start": 0,
+        "end": 15
+      },
+      {
+        "text": "2026",
+        "label": "DATE",
+        "start": 22,
+        "end": 26
+      },
+      {
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 77,
+        "end": 89
+      },
+      {
+        "text": "CIMB Securities Research",
+        "label": "ORG",
+        "start": 91,
         "end": 115
       },
       {
-        "text": "Klang Valley",
+        "text": "Malaysia",
         "label": "GPE",
-        "start": 143,
-        "end": 155
+        "start": 144,
+        "end": 152
       },
       {
-        "text": "Johor",
-        "label": "GPE",
-        "start": 160,
-        "end": 165
+        "text": "2026",
+        "label": "DATE",
+        "start": 155,
+        "end": 159
+      },
+      {
+        "text": "July",
+        "label": "DATE",
+        "start": 331,
+        "end": 335
+      },
+      {
+        "text": "third quarter (Q3) 2026",
+        "label": "DATE",
+        "start": 383,
+        "end": 406
       }
     ],
-    "notes": "Malaysian geographic names. Abbreviation ORG.",
-    "difficulty": "easy"
+    "notes": "Abbreviated date/quarter, repeated year, percentage expressions left out of scope.",
+    "difficulty": "hard",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
+  },
+  {
+    "id": "eval_004",
+    "original_id": "e733790dec267d18a6c488e3447f6df08be145c89f6942bc31f07889faf7e615",
+    "source_row": 401,
+    "source_name": "klsescreener.com",
+    "date_published": "28/09/2026 20.30.00",
+    "clipping": "Maybank Group",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0459",
+    "title": "Maybank completes RM2.5bil AT1 sukuk mudharabah issuance | KLSE Screener",
+    "body": "KUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the issuance of RM2.5 billion additional tier 1 (AT1) sukuk mudharabah under its sukuk programme. In a Bursa Malaysia filing today, the banking group said the perpetual sukuk comprises three series with nominal amounts of RM750 million, RM1.10 billion and RM650 million, respectively.",
+    "excerpt_provenance": {
+      "body_start_char": 0,
+      "body_end_char": 342,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
+    "gold_entities": [
+      {
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7
+      },
+      {
+        "text": "RM2.5bil",
+        "label": "MONEY",
+        "start": 18,
+        "end": 26
+      },
+      {
+        "text": "KLSE Screener",
+        "label": "ORG",
+        "start": 59,
+        "end": 72
+      },
+      {
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 74,
+        "end": 86
+      },
+      {
+        "text": "Malayan Banking Bhd",
+        "label": "ORG",
+        "start": 88,
+        "end": 107
+      },
+      {
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 109,
+        "end": 116
+      },
+      {
+        "text": "RM2.5 billion",
+        "label": "MONEY",
+        "start": 148,
+        "end": 161
+      },
+      {
+        "text": "Bursa Malaysia",
+        "label": "ORG",
+        "start": 235,
+        "end": 249
+      },
+      {
+        "text": "RM750 million",
+        "label": "MONEY",
+        "start": 354,
+        "end": 367
+      },
+      {
+        "text": "RM1.10 billion",
+        "label": "MONEY",
+        "start": 369,
+        "end": 383
+      },
+      {
+        "text": "RM650 million",
+        "label": "MONEY",
+        "start": 388,
+        "end": 401
+      }
+    ],
+    "notes": "Money abbreviations and several numeric amounts; parenthesised company short name.",
+    "difficulty": "medium",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
+  },
+  {
+    "id": "eval_005",
+    "original_id": "91f7d72a0c4fdc0090ce2dcad7b2a2c766613fa5dca99da86777640df2a45d19",
+    "source_row": 80,
+    "source_name": "klsescreener.com",
+    "date_published": "23/09/2026 15.44.00",
+    "clipping": "Hong Leong Bank",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0293",
+    "title": "HLB Islamic channels RM138,600 to SURI entrepreneurs under iTEKAD | KLSE Screener",
+    "body": "KUALA LUMPUR: HLB Islamic has channelled RM138,600 in social financing to social enterprise SURI Inspirasi under Bank Negara Malaysia’s (BNM) iTEKAD framework. In a statement, the bank said participants in SURI’s Sustainable Reliable Income (SRI) programme recorded an average 94% increase in monthly income and generated more than RM14,000 in total new earnings. The programme trains participants to turn discarded fabrics into fashion products, providing them with skills and opportunities to generate income.",
+    "excerpt_provenance": {
+      "body_start_char": 0,
+      "body_end_char": 511,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
+    "gold_entities": [
+      {
+        "text": "HLB Islamic",
+        "label": "ORG",
+        "start": 0,
+        "end": 11
+      },
+      {
+        "text": "RM138,600",
+        "label": "MONEY",
+        "start": 21,
+        "end": 30
+      },
+      {
+        "text": "SURI",
+        "label": "ORG",
+        "start": 34,
+        "end": 38
+      },
+      {
+        "text": "KLSE Screener",
+        "label": "ORG",
+        "start": 68,
+        "end": 81
+      },
+      {
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 83,
+        "end": 95
+      },
+      {
+        "text": "HLB Islamic",
+        "label": "ORG",
+        "start": 97,
+        "end": 108
+      },
+      {
+        "text": "RM138,600",
+        "label": "MONEY",
+        "start": 124,
+        "end": 133
+      },
+      {
+        "text": "SURI Inspirasi",
+        "label": "ORG",
+        "start": 175,
+        "end": 189
+      },
+      {
+        "text": "Bank Negara Malaysia",
+        "label": "ORG",
+        "start": 196,
+        "end": 216
+      },
+      {
+        "text": "BNM",
+        "label": "ORG",
+        "start": 220,
+        "end": 223
+      },
+      {
+        "text": "SURI",
+        "label": "ORG",
+        "start": 289,
+        "end": 293
+      },
+      {
+        "text": "RM14,000",
+        "label": "MONEY",
+        "start": 415,
+        "end": 423
+      }
+    ],
+    "notes": "Abbreviation BNM, possessive SURI, comma-formatted money, repeated organisation names.",
+    "difficulty": "hard",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
+  },
+  {
+    "id": "eval_006",
+    "original_id": "6bc249bb970713cb08f3af7c899347d071c98e5536d353ef8f374067a9fcd716",
+    "source_row": 246,
+    "source_name": "aliran.com",
+    "date_published": "01/10/2026 15.14.23",
+    "clipping": "CIMB Group Malaysia",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0216",
+    "title": "Bandung 1955: What happens when countries stand up to the superpowers?",
+    "body": "Who decides the rules, and who has to live with them? From US President Donald Trump’s tariffs to war in West Asia, the question of who holds power is as urgent as ever. In 1955, representatives of 29 Asian and African nations gathered in Bandung, Indonesia, seeking a greater say in their own futures.",
+    "excerpt_provenance": {
+      "body_start_char": 0,
+      "body_end_char": 302,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
+    "gold_entities": [
+      {
+        "text": "Bandung",
+        "label": "GPE",
+        "start": 0,
+        "end": 7
+      },
+      {
+        "text": "1955",
+        "label": "DATE",
+        "start": 8,
+        "end": 12
+      },
+      {
+        "text": "US",
+        "label": "GPE",
+        "start": 131,
+        "end": 133
+      },
+      {
+        "text": "Donald Trump",
+        "label": "PERSON",
+        "start": 144,
+        "end": 156
+      },
+      {
+        "text": "West Asia",
+        "label": "LOC",
+        "start": 177,
+        "end": 186
+      },
+      {
+        "text": "1955",
+        "label": "DATE",
+        "start": 245,
+        "end": 249
+      },
+      {
+        "text": "Asian",
+        "label": "NORP",
+        "start": 273,
+        "end": 278
+      },
+      {
+        "text": "African",
+        "label": "NORP",
+        "start": 283,
+        "end": 290
+      },
+      {
+        "text": "Bandung",
+        "label": "GPE",
+        "start": 311,
+        "end": 318
+      },
+      {
+        "text": "Indonesia",
+        "label": "GPE",
+        "start": 320,
+        "end": 329
+      }
+    ],
+    "notes": "Historical date, country abbreviation, region, nationality adjectives, repeated Bandung.",
+    "difficulty": "hard",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
+  },
+  {
+    "id": "eval_007",
+    "original_id": "04e4bfb2beb86d2ecea5d01dafd34eea9ff02c2a0398c1b610c894c581b2a3f1",
+    "source_row": 34,
+    "source_name": "malaymail.com",
+    "date_published": "04/10/2026 12.53.06",
+    "clipping": "Hong Leong Bank",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0006",
+    "title": "From F1 to the World Cup: How Anwar is using sport as diplomacy to put Malaysia on the world stage",
+    "body": "KUALA LUMPUR, Oct 4 — Prime Minister Datuk Seri Anwar Ibrahim’s approach of leveraging sports as a platform for diplomacy, economic activity and nation branding is helping position Malaysia back on the global sporting stage, according to an analyst. Global Peace Institute, London senior fellow Prof Dr Mohd Mizan Mohammad Aslam said Malaysia had, in recent months, demonstrated how global sporting events could be used not only to entertain the public but also to strengthen international relationships, generate economic activity and create a sense of shared national excitement.",
+    "excerpt_provenance": {
+      "body_start_char": 0,
+      "body_end_char": 581,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
+    "gold_entities": [
+      {
+        "text": "F1",
+        "label": "EVENT",
+        "start": 5,
+        "end": 7
+      },
+      {
+        "text": "World Cup",
+        "label": "EVENT",
+        "start": 15,
+        "end": 24
+      },
+      {
+        "text": "Anwar",
+        "label": "PERSON",
+        "start": 30,
+        "end": 35
+      },
+      {
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 71,
+        "end": 79
+      },
+      {
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 100,
+        "end": 112
+      },
+      {
+        "text": "Oct 4",
+        "label": "DATE",
+        "start": 114,
+        "end": 119
+      },
+      {
+        "text": "Datuk Seri Anwar Ibrahim",
+        "label": "PERSON",
+        "start": 137,
+        "end": 161
+      },
+      {
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 281,
+        "end": 289
+      },
+      {
+        "text": "Global Peace Institute",
+        "label": "ORG",
+        "start": 350,
+        "end": 372
+      },
+      {
+        "text": "London",
+        "label": "GPE",
+        "start": 374,
+        "end": 380
+      },
+      {
+        "text": "Prof Dr Mohd Mizan Mohammad Aslam",
+        "label": "PERSON",
+        "start": 395,
+        "end": 428
+      },
+      {
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 434,
+        "end": 442
+      }
+    ],
+    "notes": "Title abbreviations, honorific plus person, institute and city, repeated Malaysia.",
+    "difficulty": "hard",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
+  },
+  {
+    "id": "eval_008",
+    "original_id": "5798999ae3e007d01e1da023040ca5ee90cd254cc03f296053b5e04bcbdc65ae",
+    "source_row": 126,
+    "source_name": "bernama.com",
+    "date_published": "25/09/2026 23.36.31",
+    "clipping": "Maybank CSR",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0183",
+    "title": "BERNAMA - Maybank Group Sustainability Week 2026 Advances Net Zero Ambitions Through Capacity Building and Collective Action",
+    "body": "KUALA LUMPUR, Sept 25 (Bernama) -- Maybank recently organised the Maybank Group Sustainability Week (MGSW) 2026, a three-day programme held from 21 to 23 September 2026 at Menara Merdeka Maybank. Under the theme “Net Zero. From Commitment to Action”, MGSW 2026 focuses on advancing Maybank’s net zero journey through capacity building, sustainability awareness and capabilities, in line with the Group’s ROAR30 sustainability ambitions.",
+    "excerpt_provenance": {
+      "body_start_char": 0,
+      "body_end_char": 436,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
+    "gold_entities": [
+      {
+        "text": "BERNAMA",
+        "label": "ORG",
+        "start": 0,
+        "end": 7
+      },
+      {
+        "text": "Maybank Group Sustainability Week 2026",
+        "label": "EVENT",
+        "start": 10,
+        "end": 48
+      },
+      {
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 126,
+        "end": 138
+      },
+      {
+        "text": "Sept 25",
+        "label": "DATE",
+        "start": 140,
+        "end": 147
+      },
+      {
+        "text": "Bernama",
+        "label": "ORG",
+        "start": 149,
+        "end": 156
+      },
+      {
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 161,
+        "end": 168
+      },
+      {
+        "text": "Maybank Group Sustainability Week (MGSW) 2026",
+        "label": "EVENT",
+        "start": 192,
+        "end": 237
+      },
+      {
+        "text": "21 to 23 September 2026",
+        "label": "DATE",
+        "start": 271,
+        "end": 294
+      },
+      {
+        "text": "Menara Merdeka Maybank",
+        "label": "LOC",
+        "start": 298,
+        "end": 320
+      },
+      {
+        "text": "MGSW 2026",
+        "label": "EVENT",
+        "start": 377,
+        "end": 386
+      },
+      {
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 408,
+        "end": 415
+      }
+    ],
+    "notes": "Event name with parenthetical acronym, building location, repeated Maybank, source organisation.",
+    "difficulty": "hard",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
+  },
+  {
+    "id": "eval_009",
+    "original_id": "aab2f8717a8977c22b2226a76705b78ea021cd9b1a117249cd500cde939be944",
+    "source_row": 56,
+    "source_name": "1side0.net",
+    "date_published": "01/10/2026 17.28.30",
+    "clipping": "Hong Leong Bank",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0355",
+    "title": "Red Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026",
+    "body": "Red Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026 Red Hat has named Hong Leong Bank as the Malaysian winner of the Red Hat APAC Innovation Awards 2026, recognising the bank’s use of open source technologies to modernise its infrastructure and improve digital services. This year’s awards, themed “Unlock what’s next,” recognise 32 organisations across 13 Asia Pacific markets for using Red Hat solutions to address complex business challenges and drive innovation.",
+    "excerpt_provenance": {
+      "body_start_char": 0,
+      "body_end_char": 480,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
+    "gold_entities": [
+      {
+        "text": "Red Hat",
+        "label": "ORG",
+        "start": 0,
+        "end": 7
+      },
+      {
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 19,
+        "end": 34
+      },
+      {
+        "text": "APAC Innovation Awards 2026",
+        "label": "EVENT",
+        "start": 38,
+        "end": 65
+      },
+      {
+        "text": "Red Hat",
+        "label": "ORG",
+        "start": 67,
+        "end": 74
+      },
+      {
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 86,
+        "end": 101
+      },
+      {
+        "text": "Malaysian",
+        "label": "NORP",
+        "start": 174,
+        "end": 183
+      },
+      {
+        "text": "Red Hat",
+        "label": "ORG",
+        "start": 198,
+        "end": 205
+      },
+      {
+        "text": "APAC Innovation Awards 2026",
+        "label": "EVENT",
+        "start": 105,
+        "end": 132
+      },
+      {
+        "text": "Asia Pacific",
+        "label": "LOC",
+        "start": 438,
+        "end": 450
+      },
+      {
+        "text": "Red Hat",
+        "label": "ORG",
+        "start": 469,
+        "end": 476
+      }
+    ],
+    "notes": "Repeated organisation and award names, nationality adjective, region.",
+    "difficulty": "medium",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
+  },
+  {
+    "id": "eval_010",
+    "original_id": "d07aee93f368db8b2bc52eac0d9670e5e7ba7dcc5769918cbecb901bd024945e",
+    "source_row": 48,
+    "source_name": "nst.com.my",
+    "date_published": "04/10/2026 12.37.39",
+    "clipping": "Maybank CSR",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0422",
+    "title": "Giggs warns Asean nations naturalised players not quick fix",
+    "body": "KUALA LUMPUR: Manchester United icon Ryan Giggs has urged Southeast Asian nations not to treat naturalised and dual-heritage players as a shortcut to success. Giggs cautioned that strong domestic academy pipelines must anchor sustainable progress in football. Speaking to reporters in the capital, the 13-time Premier League winner addressed the accelerating trend across the region, where nations including Malaysia and Indonesia have increasingly turned to foreign-born and heritage players to fast-track competitiveness on the continental stage.",
+    "excerpt_provenance": {
+      "body_start_char": 0,
+      "body_end_char": 548,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
+    "gold_entities": [
+      {
+        "text": "Giggs",
+        "label": "PERSON",
+        "start": 0,
+        "end": 5
+      },
+      {
+        "text": "Asean",
+        "label": "ORG",
+        "start": 12,
+        "end": 17
+      },
+      {
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 61,
+        "end": 73
+      },
+      {
+        "text": "Manchester United",
+        "label": "ORG",
+        "start": 75,
+        "end": 92
+      },
+      {
+        "text": "Ryan Giggs",
+        "label": "PERSON",
+        "start": 98,
+        "end": 108
+      },
+      {
+        "text": "Southeast Asian",
+        "label": "NORP",
+        "start": 119,
+        "end": 134
+      },
+      {
+        "text": "Giggs",
+        "label": "PERSON",
+        "start": 220,
+        "end": 225
+      },
+      {
+        "text": "Premier League",
+        "label": "ORG",
+        "start": 371,
+        "end": 385
+      },
+      {
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 469,
+        "end": 477
+      },
+      {
+        "text": "Indonesia",
+        "label": "GPE",
+        "start": 482,
+        "end": 491
+      }
+    ],
+    "notes": "Person surname repeated, organisation with space, nationality adjective, two countries.",
+    "difficulty": "hard",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
+  },
+  {
+    "id": "eval_011",
+    "original_id": "7879fbe93d029e5036782d2e5b655d1a7b5784f34bea1a835bc733bf15826c6f",
+    "source_row": 75,
+    "source_name": "luminews.my",
+    "date_published": "23/09/2026 19.12.40",
+    "clipping": "Hong Leong Bank",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0244",
+    "title": "Hong Leong Bank declares 80 sen final dividend",
+    "body": "by ANN ZAINUDDIN   HONG Leong Bank Bhd has declared a final single-tier dividend of 80 sen per share for the financial year ended June 30, 2026.   In a filing with Bursa Malaysia, the group said the dividend will be payable on Oct 21, 2026.    The ex-date for the dividend is set for Oct 7, while the entitlement date falls on Oct 8 at 5pm.",
+    "excerpt_provenance": {
+      "body_start_char": 0,
+      "body_end_char": 340,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
+    "gold_entities": [
+      {
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 0,
+        "end": 15
+      },
+      {
+        "text": "80 sen",
+        "label": "MONEY",
+        "start": 25,
+        "end": 31
+      },
+      {
+        "text": "ANN ZAINUDDIN",
+        "label": "PERSON",
+        "start": 51,
+        "end": 64
+      },
+      {
+        "text": "HONG Leong Bank Bhd",
+        "label": "ORG",
+        "start": 67,
+        "end": 86
+      },
+      {
+        "text": "80 sen",
+        "label": "MONEY",
+        "start": 132,
+        "end": 138
+      },
+      {
+        "text": "June 30, 2026",
+        "label": "DATE",
+        "start": 178,
+        "end": 191
+      },
+      {
+        "text": "Bursa Malaysia",
+        "label": "ORG",
+        "start": 212,
+        "end": 226
+      },
+      {
+        "text": "Oct 21, 2026",
+        "label": "DATE",
+        "start": 275,
+        "end": 287
+      },
+      {
+        "text": "Oct 7",
+        "label": "DATE",
+        "start": 332,
+        "end": 337
+      },
+      {
+        "text": "Oct 8",
+        "label": "DATE",
+        "start": 375,
+        "end": 380
+      }
+    ],
+    "notes": "Byline person, money in sen, bank name variant, several abbreviated dates.",
+    "difficulty": "medium",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
+  },
+  {
+    "id": "eval_012",
+    "original_id": "0af14a1c897afe00203b25d81b887c8c251b7ddce9afb000b42dc8e39422cd14",
+    "source_row": 49,
+    "source_name": "businesstoday.com.my",
+    "date_published": "01/10/2026 22.44.33",
+    "clipping": "Hong Leong Bank",
+    "split": "test",
+    "near_duplicate_cluster": "cluster_0020",
+    "title": "Analysts Stay Neutral On Banks As Funding Costs, Asset Quality Risks Build",
+    "body": "The research house also flagged the potential impact of higher bond yields on trading income and mark-to-market valuations.",
+    "excerpt_provenance": {
+      "body_start_char": 1725,
+      "body_end_char": 1848,
+      "selection": "verbatim excerpt from a deterministic held-out test-split article"
+    },
+    "gold_entities": [],
+    "notes": "Negative control: generic market commentary with no named entities in the excerpt.",
+    "difficulty": "medium",
+    "review_status": "human-reviewed",
+    "annotator": "AI-assisted draft from CSV",
+    "reviewer": "adam",
+    "reviewed_at": "2026-10-23"
   }
 ]

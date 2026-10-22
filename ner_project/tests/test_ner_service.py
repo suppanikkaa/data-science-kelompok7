@@ -202,11 +202,33 @@ class TestAPIEndpoint:
                           content_type="application/json")
         assert res.status_code == 400
 
+    def test_extract_non_object_json_400(self, client):
+        """TC-18b: JSON body must be an object, not a list/string/number."""
+        for payload in ([], [1, 2], "text", 42):
+            res = client.post(
+                "/extract-entities",
+                data=json.dumps(payload),
+                content_type="application/json",
+            )
+            assert res.status_code == 400
+            assert "error" in json.loads(res.data)
+
     def test_panel_loads(self, client):
         """TC-19: GET / returns 200 with HTML panel."""
         res = client.get("/")
         assert res.status_code == 200
         assert b"NER" in res.data or b"entity" in res.data.lower()
+        assert b'href="/evaluation"' in res.data
+
+    def test_evaluation_page_loads(self, client):
+        """TC-21: GET /evaluation returns the model card and metrics."""
+        res = client.get("/evaluation")
+        assert res.status_code == 200
+        html = res.data.decode("utf-8")
+        assert "Model &amp; Evaluation" in html
+        assert "Human-reviewed" in html
+        assert "0.4878" in html
+        assert "122 spans" in html
 
     def test_extract_response_deterministic(self, client):
         """TC-20: Same input returns same output (deterministic)."""

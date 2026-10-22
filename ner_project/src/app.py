@@ -2,6 +2,7 @@
 Flask Web Service - Article Named Entity Recognition
 POST /extract-entities  ->  returns JSON with detected entities
 GET  /                  ->  interactive browser panel (HTML)
+GET  /evaluation        ->  model card and held-out evaluation summary (HTML)
 GET  /health            ->  health check
 """
 
@@ -10,7 +11,7 @@ import logging
 import os
 import sys
 
-from flask import Flask, jsonify, request, render_template_string
+from flask import Flask, jsonify, render_template, request, render_template_string
 
 # Allow imports from src/
 sys.path.insert(0, os.path.dirname(__file__))
@@ -20,6 +21,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+
+DATA_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "data"))
 
 # ---------------------------------------------------------------------------
 # HTML Panel - Monochrome Minimalist Black & White Edition
@@ -131,6 +134,36 @@ PANEL_HTML = r"""<!DOCTYPE html>
       letter-spacing: 0.02em;
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.8rem;
+      border: 1px solid var(--border-light);
+      border-radius: 9999px;
+      background: var(--surface);
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--white);
+      border-color: var(--border-bright);
+      background: var(--surface-elevated);
+    }
+
     .badge-status {
       display: inline-flex;
       align-items: center;
@@ -172,6 +205,17 @@ PANEL_HTML = r"""<!DOCTYPE html>
     @media (max-width: 900px) {
       .grid {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .header-inner {
+        flex-wrap: wrap;
+      }
+
+      .header-actions {
+        width: 100%;
+        justify-content: flex-start;
       }
     }
 
@@ -671,9 +715,12 @@ PANEL_HTML = r"""<!DOCTYPE html>
         <p>NLP Financial News Entity Extraction</p>
       </div>
     </div>
-    <div class="badge-status" id="modelBadgeContainer">
-      <span class="badge-dot"></span>
-      <span id="modelBadge">LOADING...</span>
+    <div class="header-actions">
+      <a class="nav-link" href="/evaluation">Model &amp; Evaluation</a>
+      <div class="badge-status" id="modelBadgeContainer">
+        <span class="badge-dot"></span>
+        <span id="modelBadge">LOADING...</span>
+      </div>
     </div>
   </div>
 </header>
@@ -968,6 +1015,191 @@ document.getElementById('titleInput').addEventListener('keypress', e => {
 
 
 # ---------------------------------------------------------------------------
+# Model / evaluation summary data
+# ---------------------------------------------------------------------------
+
+def _load_json_file(filename):
+    """Load a project JSON artifact without breaking the web service."""
+    path = os.path.join(DATA_DIR, filename)
+    try:
+        with open(path, "r", encoding="utf-8-sig") as file_handle:
+            return json.load(file_handle)
+    except FileNotFoundError:
+        logger.warning("Summary artifact not found: %s", path)
+    except (OSError, ValueError) as exc:
+        logger.warning("Could not read summary artifact %s: %s", path, exc)
+    return {}
+
+
+def _fmt_number(value, digits=4):
+    try:
+        return f"{float(value):.{digits}f}"
+    except (TypeError, ValueError):
+        return "N/A"
+
+
+def _fmt_int(value):
+    try:
+        return f"{int(value):,}"
+    except (TypeError, ValueError):
+        return "N/A"
+
+
+def _resolved_model_name():
+    trained_path = os.path.join(DATA_DIR, "trained_model")
+    if os.path.isdir(trained_path):
+        return "trained-model"
+    return os.environ.get("NER_MODEL", "en_core_web_sm")
+
+
+def _evaluation_context():
+    training = _load_json_file("training_report.json")
+    report = _load_json_file("evaluation_report.json")
+    examples = _load_json_file("evaluation_examples.json")
+    if not isinstance(examples, list):
+        examples = []
+
+    model_settings = training.get("model_settings") or {}
+    baseline = (
+        (report.get("baseline") or {}).get("overall")
+        or (training.get("baseline_metrics") or {}).get("overall")
+        or {}
+    )
+    trained = (
+        (report.get("trained") or {}).get("overall")
+        or (training.get("test_metrics") or {}).get("overall")
+        or {}
+    )
+    validation = (training.get("validation_metrics") or {}).get("overall") or {}
+    per_label = (
+        (report.get("trained") or {}).get("per_label")
+        or (training.get("test_metrics") or {}).get("per_label")
+        or {}
+    )
+
+    per_label_rows = []
+    for label, metrics in per_label.items():
+        f1_value = metrics.get("f1")
+        try:
+            weak = float(f1_value) < 0.5
+        except (TypeError, ValueError):
+            weak = False
+        per_label_rows.append(
+            {
+                "label": label,
+                "precision": _fmt_number(metrics.get("precision"), 3),
+                "recall": _fmt_number(metrics.get("recall"), 3),
+                "f1": _fmt_number(f1_value, 3),
+                "support": _fmt_int(metrics.get("support", "N/A")),
+                "weak": weak,
+            }
+        )
+
+    tuning_rows = []
+    configs = (training.get("validation_tuning") or {}).get("configs") or []
+    for config in configs:
+        best = (config.get("best_validation") or {}).get("overall") or {}
+        tuning_rows.append(
+            {
+                "name": config.get("name", "N/A"),
+                "epoch": config.get("best_epoch", "N/A"),
+                "precision": _fmt_number(best.get("precision")),
+                "recall": _fmt_number(best.get("recall")),
+                "f1": _fmt_number(best.get("f1")),
+                "seconds": _fmt_number(config.get("training_seconds"), 1),
+                "selected": config.get("name") == model_settings.get("selected_config"),
+            }
+        )
+
+    data_profile = training.get("data_profile") or {}
+    language_distribution = data_profile.get("language_distribution") or {}
+    near_duplicate = data_profile.get("near_duplicate_audit") or {}
+    data_split = training.get("data_split") or {}
+    split_rows = []
+    for key, label in (("train", "Train"), ("validation", "Validation"), ("test", "Test")):
+        split = data_split.get(key) or {}
+        split_rows.append(
+            {
+                "label": label,
+                "documents": _fmt_int(split.get("documents", "N/A")),
+                "clusters": _fmt_int(split.get("near_duplicate_clusters", "N/A")),
+                "spans": _fmt_int(split.get("spans", "N/A")),
+            }
+        )
+
+    statuses = sorted({str(example.get("review_status", "unknown")) for example in examples})
+    reviewers = sorted(
+        {str(example.get("reviewer")) for example in examples if example.get("reviewer")}
+    )
+    reviewed_dates = sorted(
+        {str(example.get("reviewed_at")) for example in examples if example.get("reviewed_at")}
+    )
+    all_human_reviewed = bool(examples) and statuses == ["human-reviewed"]
+    if all_human_reviewed:
+        review_label = "Human-reviewed"
+    elif examples:
+        review_label = "Pending human review"
+    else:
+        review_label = "No review metadata"
+
+    gold_spans = sum(len(example.get("gold_entities") or []) for example in examples)
+    entity_rich = sum(1 for example in examples if example.get("gold_entities"))
+
+    try:
+        delta_f1 = f"{float(trained.get('f1')) - float(baseline.get('f1')):+.4f}"
+    except (TypeError, ValueError):
+        delta_f1 = "N/A"
+
+    return {
+        "has_reports": bool(training or report or examples),
+        "model_name": _resolved_model_name(),
+        "max_text_length": MAX_TEXT_LENGTH,
+        "selected_config": model_settings.get("selected_config", "N/A"),
+        "selected_epoch": model_settings.get("selected_epoch", "N/A"),
+        "base_model": model_settings.get("base_model", "N/A"),
+        "base_model_version": model_settings.get("base_model_version", "N/A"),
+        "spacy_version": model_settings.get("spacy_version", "N/A"),
+        "seed": model_settings.get("seed", "N/A"),
+        "training_seconds": _fmt_number(training.get("training_seconds"), 1),
+        "training_seconds_total": _fmt_number(training.get("training_seconds_total"), 1),
+        "baseline_precision": _fmt_number(baseline.get("precision")),
+        "baseline_recall": _fmt_number(baseline.get("recall")),
+        "baseline_f1": _fmt_number(baseline.get("f1")),
+        "test_precision": _fmt_number(trained.get("precision")),
+        "test_recall": _fmt_number(trained.get("recall")),
+        "test_f1": _fmt_number(trained.get("f1")),
+        "delta_f1": delta_f1,
+        "validation_precision": _fmt_number(validation.get("precision")),
+        "validation_recall": _fmt_number(validation.get("recall")),
+        "validation_f1": _fmt_number(validation.get("f1")),
+        "per_label_rows": per_label_rows,
+        "tuning_rows": tuning_rows,
+        "review_label": review_label,
+        "all_human_reviewed": all_human_reviewed,
+        "reviewer": ", ".join(reviewers) if reviewers else "N/A",
+        "reviewed_at": ", ".join(reviewed_dates) if reviewed_dates else "N/A",
+        "examples_count": len(examples),
+        "gold_spans": gold_spans,
+        "entity_rich": entity_rich,
+        "negative_control": len(examples) - entity_rich,
+        "raw_rows": _fmt_int(data_profile.get("raw_rows", "N/A")),
+        "unique_rows": _fmt_int(data_profile.get("unique_rows", "N/A")),
+        "duplicates": _fmt_int(data_profile.get("duplicates_removed", "N/A")),
+        "english_rows": _fmt_int(language_distribution.get("en", "N/A")),
+        "near_duplicate_clusters": _fmt_int(near_duplicate.get("clusters", "N/A")),
+        "near_duplicate_multi": _fmt_int(near_duplicate.get("multi_document_clusters", "N/A")),
+        "split_rows": split_rows,
+        "limitations": [
+            "Training labels are weak supervision from en_core_web_sm, not human gold.",
+            "EVENT and MONEY remain the weakest classes in the held-out evaluation.",
+            "The evaluation set is small (12 excerpts / 122 spans), so per-label numbers are noisy.",
+            "The service is English-only; Malay and Chinese text is not supported well.",
+            "Exact-span matching is strict; determiners and punctuation can cause FP/FN.",
+        ],
+    }
+
+
+# ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
 
@@ -976,15 +1208,41 @@ def index():
     return render_template_string(PANEL_HTML)
 
 
+@app.route("/evaluation")
+def evaluation_page():
+    try:
+        context = _evaluation_context()
+    except Exception:
+        logger.exception("Could not build evaluation summary")
+        context = {
+            "has_reports": False,
+            "model_name": _resolved_model_name(),
+            "max_text_length": MAX_TEXT_LENGTH,
+            "review_label": "Summary unavailable",
+            "all_human_reviewed": False,
+            "reviewer": "N/A",
+            "reviewed_at": "N/A",
+            "per_label_rows": [],
+            "tuning_rows": [],
+            "split_rows": [],
+            "limitations": ["The evaluation reports could not be loaded."],
+        }
+    return render_template("evaluation.html", **context)
+
+
 @app.route("/health")
 def health():
     try:
         labels = supported_labels()
-        model_info = os.environ.get("NER_MODEL", "en_core_web_sm")
-        trained_path = os.path.join(os.path.dirname(__file__), "..", "data", "trained_model")
-        if os.path.isdir(trained_path):
-            model_info = "trained-model"
-        return jsonify({"status": "ok", "model": model_info, "supported_labels": labels})
+        model_info = _resolved_model_name()
+        return jsonify(
+            {
+                "status": "ok",
+                "model": model_info,
+                "supported_labels": labels,
+                "max_text_length": MAX_TEXT_LENGTH,
+            }
+        )
     except Exception as exc:
         return jsonify({"status": "error", "message": str(exc)}), 500
 
@@ -998,6 +1256,8 @@ def extract_entities_route():
     data = request.get_json(silent=True)
     if data is None:
         return jsonify({"error": "Malformed JSON body"}), 400
+    if not isinstance(data, dict):
+        return jsonify({"error": "JSON body must be an object"}), 400
 
     # 2. Required fields must be strings
     title = data.get("title")

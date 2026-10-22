@@ -1,0 +1,25 @@
+{
+  "max_text_length": 50000,
+  "model": "trained-model",
+  "status": "ok",
+  "supported_labels": [
+    "CARDINAL",
+    "DATE",
+    "EVENT",
+    "FAC",
+    "GPE",
+    "LANGUAGE",
+    "LAW",
+    "LOC",
+    "MONEY",
+    "NORP",
+    "ORDINAL",
+    "ORG",
+    "PERCENT",
+    "PERSON",
+    "PRODUCT",
+    "QUANTITY",
+    "TIME",
+    "WORK_OF_ART"
+  ]
+}

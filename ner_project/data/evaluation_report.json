@@ -1,0 +1,2897 @@
+{
+  "examples_file": "data\\evaluation_examples.json",
+  "matching": "exact-span+label",
+  "labels_evaluated": [
+    "DATE",
+    "EVENT",
+    "GPE",
+    "LOC",
+    "MONEY",
+    "NORP",
+    "ORG",
+    "PERSON"
+  ],
+  "evaluation_examples": {
+    "count": 12,
+    "gold_spans": 122,
+    "review_statuses": [
+      "human-reviewed"
+    ],
+    "all_human_reviewed": true
+  },
+  "baseline_model": "en_core_web_sm",
+  "trained_model": "data\\trained_model",
+  "baseline": {
+    "matching": "exact-span+label",
+    "labels_evaluated": [
+      "DATE",
+      "EVENT",
+      "GPE",
+      "LOC",
+      "MONEY",
+      "NORP",
+      "ORG",
+      "PERSON"
+    ],
+    "examples": 12,
+    "gold_spans": 122,
+    "predicted_spans": 117,
+    "overall": {
+      "precision": 0.4701,
+      "recall": 0.4508,
+      "f1": 0.4603
+    },
+    "macro": {
+      "precision": 0.4691,
+      "recall": 0.5016,
+      "f1": 0.4668
+    },
+    "per_label": {
+      "DATE": {
+        "precision": 0.5,
+        "recall": 0.875,
+        "f1": 0.6364,
+        "tp": 14,
+        "fp": 14,
+        "fn": 2,
+        "support": 16
+      },
+      "EVENT": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 1,
+        "fn": 9,
+        "support": 9
+      },
+      "GPE": {
+        "precision": 0.7059,
+        "recall": 0.6,
+        "f1": 0.6486,
+        "tp": 12,
+        "fp": 5,
+        "fn": 8,
+        "support": 20
+      },
+      "LOC": {
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "support": 3
+      },
+      "MONEY": {
+        "precision": 0.1667,
+        "recall": 0.1,
+        "f1": 0.125,
+        "tp": 1,
+        "fp": 5,
+        "fn": 9,
+        "support": 10
+      },
+      "NORP": {
+        "precision": 0.6667,
+        "recall": 1.0,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 2,
+        "fn": 0,
+        "support": 4
+      },
+      "ORG": {
+        "precision": 0.4359,
+        "recall": 0.3542,
+        "f1": 0.3908,
+        "tp": 17,
+        "fp": 22,
+        "fn": 31,
+        "support": 48
+      },
+      "PERSON": {
+        "precision": 0.2778,
+        "recall": 0.4167,
+        "f1": 0.3333,
+        "tp": 5,
+        "fp": 13,
+        "fn": 7,
+        "support": 12
+      }
+    },
+    "counts": {
+      "tp": 55,
+      "fp": 62,
+      "fn": 67
+    },
+    "errors": [
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank Ageas",
+        "label": "ORG",
+        "start": 18,
+        "end": 31,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (M..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "Maybank Ageas",
+        "label": "PERSON",
+        "start": 18,
+        "end": 31,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (M..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 40,
+        "end": 52,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Malayan Banking Bhd",
+        "label": "ORG",
+        "start": 54,
+        "end": 73,
+        "context": "...ompletes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of t..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "Malayan Banking Bhd",
+        "label": "PERSON",
+        "start": 54,
+        "end": 73,
+        "context": "...ompletes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of t..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 75,
+        "end": 82,
+        "context": "...s buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of the remain..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "30.95 per cent",
+        "label": "MONEY",
+        "start": 131,
+        "end": 145,
+        "context": "...s completed the acquisition of the remaining 30.95 per cent stake in Maybank Ageas Holdings Bhd. This gi..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Hong Leong",
+        "label": "ORG",
+        "start": 9,
+        "end": 19,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malays..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Hong Leong Win Best",
+        "label": "PERSON",
+        "start": 9,
+        "end": 28,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "CFO Honours",
+        "label": "ORG",
+        "start": 37,
+        "end": 48,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awa..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Bursa Malaysia Awards",
+        "label": "EVENT",
+        "start": 52,
+        "end": 73,
+        "context": "..., Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Bursa Malaysia Awards",
+        "label": "ORG",
+        "start": 52,
+        "end": 73,
+        "context": "..., Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Bursa Malaysia",
+        "label": "ORG",
+        "start": 75,
+        "end": 89,
+        "context": "...EO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO honours to Mayba..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Bursa",
+        "label": "GPE",
+        "start": 75,
+        "end": 80,
+        "context": "...EO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO honours..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 81,
+        "end": 89,
+        "context": "... CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO honours to Mayba..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "CFO",
+        "label": "ORG",
+        "start": 114,
+        "end": 117,
+        "context": "...ards\n\nBursa Malaysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 129,
+        "end": 136,
+        "context": "...aysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leon..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Maybank’s Dato’ Sri Khairussaleh Ramli",
+        "label": "ORG",
+        "start": 129,
+        "end": 167,
+        "context": "...aysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Dato’ Sri Khairussaleh Ramli",
+        "label": "PERSON",
+        "start": 139,
+        "end": 167,
+        "context": "...ded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 172,
+        "end": 187,
+        "context": "...o Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The inaugural Bursa Mal..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Hong Leong Bank’s",
+        "label": "ORG",
+        "start": 172,
+        "end": 189,
+        "context": "...o Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The inaugural Bursa Malay..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Malkit Singh Maan",
+        "label": "PERSON",
+        "start": 190,
+        "end": 207,
+        "context": "...Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The inaugural Bursa Malaysia IR Awards 2026..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Bursa Malaysia IR Awards 2026",
+        "label": "EVENT",
+        "start": 223,
+        "end": 252,
+        "context": "...eong Bank’s Malkit Singh Maan. The inaugural Bursa Malaysia IR Awards 2026 took place on 4 September. Maybank received ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Bursa Malaysia IR Awards",
+        "label": "ORG",
+        "start": 223,
+        "end": 247,
+        "context": "...eong Bank’s Malkit Singh Maan. The inaugural Bursa Malaysia IR Awards 2026 took place on 4 September. Maybank rece..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "2026",
+        "label": "DATE",
+        "start": 248,
+        "end": 252,
+        "context": "...Maan. The inaugural Bursa Malaysia IR Awards 2026 took place on 4 September. Maybank received ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 280,
+        "end": 287,
+        "context": "...ia IR Awards 2026 took place on 4 September. Maybank received four honours, including Best CEO in..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Group",
+        "label": "ORG",
+        "start": 374,
+        "end": 379,
+        "context": "... in Investor Relations for its President and Group CEO Khairussaleh. The bank also won Best Com..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Khairussaleh",
+        "label": "PERSON",
+        "start": 384,
+        "end": 396,
+        "context": "...or Relations for its President and Group CEO Khairussaleh. The bank also won Best Company in Investor ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Best Company",
+        "label": "ORG",
+        "start": 416,
+        "end": 428,
+        "context": "...nd Group CEO Khairussaleh. The bank also won Best Company in Investor Relations overall, Best Financia..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Best Financial Reporting",
+        "label": "ORG",
+        "start": 460,
+        "end": 484,
+        "context": "... Best Company in Investor Relations overall, Best Financial Reporting and Best Large-cap Company in Investor Relat..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Malkit",
+        "label": "PERSON",
+        "start": 558,
+        "end": 564,
+        "context": "...n Investor Relations for Financial Services. Malkit won Best CFO in Investor Relations. Hong Leo..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_003",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 77,
+        "end": 89,
+        "context": "...rowth forecast to 5pct on domestic strength\n\nKUALA LUMPUR: CIMB Securities Research has raised its for..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "KUALA",
+        "label": "ORG",
+        "start": 77,
+        "end": 82,
+        "context": "...rowth forecast to 5pct on domestic strength\n\nKUALA LUMPUR: CIMB Securities Research has raised ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "five per cent",
+        "label": "MONEY",
+        "start": 199,
+        "end": 212,
+        "context": "... 2026 gross domestic product (GDP) growth to five per cent from 4.8 per cent previously, backed by stro..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "4.8 per cent",
+        "label": "MONEY",
+        "start": 218,
+        "end": 230,
+        "context": "...c product (GDP) growth to five per cent from 4.8 per cent previously, backed by stronger-than-expected..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "IPI",
+        "label": "ORG",
+        "start": 365,
+        "end": 368,
+        "context": "...n-expected July Industrial Production Index (IPI) outturn, the third quarter (Q3) 2026 GDP no..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "the third quarter",
+        "label": "DATE",
+        "start": 379,
+        "end": 396,
+        "context": "...y Industrial Production Index (IPI) outturn, the third quarter (Q3) 2026 GDP nowcast has edged down to 5.0 ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_003",
+        "text": "third quarter (Q3) 2026",
+        "label": "DATE",
+        "start": 383,
+        "end": 406,
+        "context": "...dustrial Production Index (IPI) outturn, the third quarter (Q3) 2026 GDP nowcast has edged down to 5.0 per cent f..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "2026",
+        "label": "DATE",
+        "start": 402,
+        "end": 406,
+        "context": "... Index (IPI) outturn, the third quarter (Q3) 2026 GDP nowcast has edged down to 5.0 per cent f..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "5.0 per cent",
+        "label": "MONEY",
+        "start": 437,
+        "end": 449,
+        "context": "...rter (Q3) 2026 GDP nowcast has edged down to 5.0 per cent from 5.2 per cent,\" it said in a note."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "5.2 per cent",
+        "label": "MONEY",
+        "start": 455,
+        "end": 467,
+        "context": "... nowcast has edged down to 5.0 per cent from 5.2 per cent,\" it said in a note."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Maybank completes RM2.5bil AT1 sukuk mudharabah issu..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "RM2.5bil",
+        "label": "MONEY",
+        "start": 18,
+        "end": 26,
+        "context": "Maybank completes RM2.5bil AT1 sukuk mudharabah issuance | KLSE Screene..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "KLSE Screener",
+        "label": "ORG",
+        "start": 59,
+        "end": 72,
+        "context": "...tes RM2.5bil AT1 sukuk mudharabah issuance | KLSE Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank)..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_004",
+        "text": "KLSE Screener",
+        "label": "PERSON",
+        "start": 59,
+        "end": 72,
+        "context": "...tes RM2.5bil AT1 sukuk mudharabah issuance | KLSE Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank)..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 74,
+        "end": 86,
+        "context": "...1 sukuk mudharabah issuance | KLSE Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "Malayan Banking Bhd",
+        "label": "ORG",
+        "start": 88,
+        "end": 107,
+        "context": "...abah issuance | KLSE Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the issuance of RM2...."
+      },
+      {
+        "type": "FP",
+        "article": "eval_004",
+        "text": "Malayan Banking Bhd",
+        "label": "PERSON",
+        "start": 88,
+        "end": 107,
+        "context": "...abah issuance | KLSE Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the issuance of RM2...."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 109,
+        "end": 116,
+        "context": "...Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the issuance of RM2.5 billion..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "RM2.5 billion",
+        "label": "MONEY",
+        "start": 148,
+        "end": 161,
+        "context": "... Bhd (Maybank) has completed the issuance of RM2.5 billion additional tier 1 (AT1) sukuk mudharabah und..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "Bursa Malaysia",
+        "label": "ORG",
+        "start": 235,
+        "end": 249,
+        "context": "...k mudharabah under its sukuk programme. In a Bursa Malaysia filing today, the banking group said the per..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_004",
+        "text": "Bursa",
+        "label": "GPE",
+        "start": 235,
+        "end": 240,
+        "context": "...k mudharabah under its sukuk programme. In a Bursa Malaysia filing today, the banking group sai..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_004",
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 241,
+        "end": 249,
+        "context": "...arabah under its sukuk programme. In a Bursa Malaysia filing today, the banking group said the per..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_004",
+        "text": "today",
+        "label": "DATE",
+        "start": 257,
+        "end": 262,
+        "context": "... sukuk programme. In a Bursa Malaysia filing today, the banking group said the perpetual sukuk ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "RM1.10 billion",
+        "label": "MONEY",
+        "start": 369,
+        "end": 383,
+        "context": "...eries with nominal amounts of RM750 million, RM1.10 billion and RM650 million, respectively."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "RM650 million",
+        "label": "MONEY",
+        "start": 388,
+        "end": 401,
+        "context": "...amounts of RM750 million, RM1.10 billion and RM650 million, respectively."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "HLB Islamic",
+        "label": "ORG",
+        "start": 0,
+        "end": 11,
+        "context": "HLB Islamic channels RM138,600 to SURI entrepreneurs und..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_005",
+        "text": "HLB",
+        "label": "ORG",
+        "start": 0,
+        "end": 3,
+        "context": "HLB Islamic channels RM138,600 to SURI entrepren..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_005",
+        "text": "Islamic",
+        "label": "NORP",
+        "start": 4,
+        "end": 11,
+        "context": "HLB Islamic channels RM138,600 to SURI entrepreneurs und..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "RM138,600",
+        "label": "MONEY",
+        "start": 21,
+        "end": 30,
+        "context": "HLB Islamic channels RM138,600 to SURI entrepreneurs under iTEKAD | KLSE Sc..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_005",
+        "text": "RM138,600",
+        "label": "PERSON",
+        "start": 21,
+        "end": 30,
+        "context": "HLB Islamic channels RM138,600 to SURI entrepreneurs under iTEKAD | KLSE Sc..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "SURI",
+        "label": "ORG",
+        "start": 34,
+        "end": 38,
+        "context": "HLB Islamic channels RM138,600 to SURI entrepreneurs under iTEKAD | KLSE Screener\n\n..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "KLSE Screener",
+        "label": "ORG",
+        "start": 68,
+        "end": 81,
+        "context": "...138,600 to SURI entrepreneurs under iTEKAD | KLSE Screener\n\nKUALA LUMPUR: HLB Islamic has channelled RM..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_005",
+        "text": "KLSE Screener",
+        "label": "PERSON",
+        "start": 68,
+        "end": 81,
+        "context": "...138,600 to SURI entrepreneurs under iTEKAD | KLSE Screener\n\nKUALA LUMPUR: HLB Islamic has channelled RM..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 83,
+        "end": 95,
+        "context": "... entrepreneurs under iTEKAD | KLSE Screener\n\nKUALA LUMPUR: HLB Islamic has channelled RM138,600 in soc..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "RM138,600",
+        "label": "MONEY",
+        "start": 124,
+        "end": 133,
+        "context": "...er\n\nKUALA LUMPUR: HLB Islamic has channelled RM138,600 in social financing to social enterprise SUR..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "SURI Inspirasi",
+        "label": "ORG",
+        "start": 175,
+        "end": 189,
+        "context": "...600 in social financing to social enterprise SURI Inspirasi under Bank Negara Malaysia’s (BNM) iTEKAD fr..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_005",
+        "text": "Inspirasi",
+        "label": "ORG",
+        "start": 180,
+        "end": 189,
+        "context": "...n social financing to social enterprise SURI Inspirasi under Bank Negara Malaysia’s (BNM) iTEKAD fr..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "Bank Negara Malaysia",
+        "label": "ORG",
+        "start": 196,
+        "end": 216,
+        "context": "...ng to social enterprise SURI Inspirasi under Bank Negara Malaysia’s (BNM) iTEKAD framework. In a statement, th..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_005",
+        "text": "Bank Negara Malaysia’s",
+        "label": "ORG",
+        "start": 196,
+        "end": 218,
+        "context": "...ng to social enterprise SURI Inspirasi under Bank Negara Malaysia’s (BNM) iTEKAD framework. In a statement, the ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "SURI",
+        "label": "ORG",
+        "start": 289,
+        "end": 293,
+        "context": "...n a statement, the bank said participants in SURI’s Sustainable Reliable Income (SRI) programm..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_005",
+        "text": "monthly",
+        "label": "DATE",
+        "start": 376,
+        "end": 383,
+        "context": "...rogramme recorded an average 94% increase in monthly income and generated more than RM14,000 in t..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "RM14,000",
+        "label": "MONEY",
+        "start": 415,
+        "end": 423,
+        "context": "...se in monthly income and generated more than RM14,000 in total new earnings. The programme trains ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_006",
+        "text": "Bandung",
+        "label": "GPE",
+        "start": 0,
+        "end": 7,
+        "context": "Bandung 1955: What happens when countries stand up t..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_007",
+        "text": "F1",
+        "label": "EVENT",
+        "start": 5,
+        "end": 7,
+        "context": "From F1 to the World Cup: How Anwar is using sport a..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "F1",
+        "label": "GPE",
+        "start": 5,
+        "end": 7,
+        "context": "From F1 to the World Cup: How Anwar is using sport a..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "the World Cup: How Anwar",
+        "label": "EVENT",
+        "start": 11,
+        "end": 35,
+        "context": "From F1 to the World Cup: How Anwar is using sport as diplomacy to put Malaysia ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_007",
+        "text": "World Cup",
+        "label": "EVENT",
+        "start": 15,
+        "end": 24,
+        "context": "From F1 to the World Cup: How Anwar is using sport as diplomacy to pu..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_007",
+        "text": "Anwar",
+        "label": "PERSON",
+        "start": 30,
+        "end": 35,
+        "context": "From F1 to the World Cup: How Anwar is using sport as diplomacy to put Malaysia ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_007",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 100,
+        "end": 112,
+        "context": "...iplomacy to put Malaysia on the world stage\n\nKUALA LUMPUR, Oct 4 — Prime Minister Datuk Seri Anwar Ibr..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_007",
+        "text": "Datuk Seri Anwar Ibrahim",
+        "label": "PERSON",
+        "start": 137,
+        "end": 161,
+        "context": "... stage\n\nKUALA LUMPUR, Oct 4 — Prime Minister Datuk Seri Anwar Ibrahim’s approach of leveraging sports as a platfor..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "Datuk Seri",
+        "label": "PERSON",
+        "start": 137,
+        "end": 147,
+        "context": "... stage\n\nKUALA LUMPUR, Oct 4 — Prime Minister Datuk Seri Anwar Ibrahim’s approach of leveraging sport..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "Anwar Ibrahim’s",
+        "label": "PERSON",
+        "start": 148,
+        "end": 163,
+        "context": "...LA LUMPUR, Oct 4 — Prime Minister Datuk Seri Anwar Ibrahim’s approach of leveraging sports as a platform ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_007",
+        "text": "Prof Dr Mohd Mizan Mohammad Aslam",
+        "label": "PERSON",
+        "start": 395,
+        "end": 428,
+        "context": "...Global Peace Institute, London senior fellow Prof Dr Mohd Mizan Mohammad Aslam said Malaysia had, in recent months, demonst..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "Prof Dr",
+        "label": "PERSON",
+        "start": 395,
+        "end": 402,
+        "context": "...Global Peace Institute, London senior fellow Prof Dr Mohd Mizan Mohammad Aslam said Malaysia had,..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "Mohd Mizan Mohammad Aslam",
+        "label": "PERSON",
+        "start": 403,
+        "end": 428,
+        "context": "...eace Institute, London senior fellow Prof Dr Mohd Mizan Mohammad Aslam said Malaysia had, in recent months, demonst..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "recent months",
+        "label": "DATE",
+        "start": 451,
+        "end": 464,
+        "context": "...d Mizan Mohammad Aslam said Malaysia had, in recent months, demonstrated how global sporting events cou..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "BERNAMA",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "BERNAMA - Maybank Group Sustainability Week 2026 Adv..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "BERNAMA - Maybank Group Sustainability",
+        "label": "ORG",
+        "start": 0,
+        "end": 38,
+        "context": "BERNAMA - Maybank Group Sustainability Week 2026 Advances Net Zero Ambitions Throug..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "Maybank Group Sustainability Week 2026",
+        "label": "EVENT",
+        "start": 10,
+        "end": 48,
+        "context": "BERNAMA - Maybank Group Sustainability Week 2026 Advances Net Zero Ambitions Through Capacity..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "Week 2026",
+        "label": "DATE",
+        "start": 39,
+        "end": 48,
+        "context": "BERNAMA - Maybank Group Sustainability Week 2026 Advances Net Zero Ambitions Through Capacity..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 126,
+        "end": 138,
+        "context": "...ugh Capacity Building and Collective Action\n\nKUALA LUMPUR, Sept 25 (Bernama) -- Maybank recently organ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 161,
+        "end": 168,
+        "context": "...e Action\n\nKUALA LUMPUR, Sept 25 (Bernama) -- Maybank recently organised the Maybank Group Sustain..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "the Maybank Group Sustainability Week",
+        "label": "ORG",
+        "start": 188,
+        "end": 225,
+        "context": "...t 25 (Bernama) -- Maybank recently organised the Maybank Group Sustainability Week (MGSW) 2026, a three-day programme held from..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "Maybank Group Sustainability Week (MGSW) 2026",
+        "label": "EVENT",
+        "start": 192,
+        "end": 237,
+        "context": "... (Bernama) -- Maybank recently organised the Maybank Group Sustainability Week (MGSW) 2026, a three-day programme held from 21 to 23 Se..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "MGSW",
+        "label": "ORG",
+        "start": 227,
+        "end": 231,
+        "context": "...nised the Maybank Group Sustainability Week (MGSW) 2026, a three-day programme held from 21 to..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "2026",
+        "label": "DATE",
+        "start": 233,
+        "end": 237,
+        "context": "...the Maybank Group Sustainability Week (MGSW) 2026, a three-day programme held from 21 to 23 Se..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "three-day",
+        "label": "DATE",
+        "start": 241,
+        "end": 250,
+        "context": "...ank Group Sustainability Week (MGSW) 2026, a three-day programme held from 21 to 23 September 2026 ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "Menara Merdeka Maybank",
+        "label": "LOC",
+        "start": 298,
+        "end": 320,
+        "context": "...ogramme held from 21 to 23 September 2026 at Menara Merdeka Maybank. Under the theme “Net Zero. From Commitment ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "Menara Merdeka Maybank",
+        "label": "ORG",
+        "start": 298,
+        "end": 320,
+        "context": "...ogramme held from 21 to 23 September 2026 at Menara Merdeka Maybank. Under the theme “Net Zero. From Commitment ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "MGSW 2026",
+        "label": "EVENT",
+        "start": 377,
+        "end": 386,
+        "context": "...theme “Net Zero. From Commitment to Action”, MGSW 2026 focuses on advancing Maybank’s net zero jour..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "MGSW 2026",
+        "label": "ORG",
+        "start": 377,
+        "end": 386,
+        "context": "...theme “Net Zero. From Commitment to Action”, MGSW 2026 focuses on advancing Maybank’s net zero jour..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "Group",
+        "label": "ORG",
+        "start": 522,
+        "end": 527,
+        "context": "...awareness and capabilities, in line with the Group’s ROAR30 sustainability ambitions."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "Red Hat",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Red Hat Recognises Hong Leong Bank at APAC Innovatio..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 19,
+        "end": 34,
+        "context": "Red Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026\n\nRed Hat Reco..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "APAC Innovation Awards 2026",
+        "label": "EVENT",
+        "start": 38,
+        "end": 65,
+        "context": "Red Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026\n\nRed Hat Recognises Hong Leong Bank at APAC ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "2026",
+        "label": "DATE",
+        "start": 61,
+        "end": 65,
+        "context": "...es Hong Leong Bank at APAC Innovation Awards 2026\n\nRed Hat Recognises Hong Leong Bank at APAC ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "Red Hat",
+        "label": "ORG",
+        "start": 67,
+        "end": 74,
+        "context": "...g Leong Bank at APAC Innovation Awards 2026\n\nRed Hat Recognises Hong Leong Bank at APAC Innovatio..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 86,
+        "end": 101,
+        "context": "...C Innovation Awards 2026\n\nRed Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026 Red Hat has n..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "APAC Innovation Awards 2026",
+        "label": "EVENT",
+        "start": 105,
+        "end": 132,
+        "context": "... 2026\n\nRed Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026 Red Hat has named Hong Leong Bank as the Mal..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "2026",
+        "label": "DATE",
+        "start": 128,
+        "end": 132,
+        "context": "...es Hong Leong Bank at APAC Innovation Awards 2026 Red Hat has named Hong Leong Bank as the Mal..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "Red Hat",
+        "label": "PERSON",
+        "start": 133,
+        "end": 140,
+        "context": "...ng Leong Bank at APAC Innovation Awards 2026 Red Hat has named Hong Leong Bank as the Malaysian w..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 151,
+        "end": 166,
+        "context": "...PAC Innovation Awards 2026 Red Hat has named Hong Leong Bank as the Malaysian winner of the Red Hat APAC ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "the Red Hat APAC Innovation Awards",
+        "label": "ORG",
+        "start": 194,
+        "end": 228,
+        "context": "...d Hong Leong Bank as the Malaysian winner of the Red Hat APAC Innovation Awards 2026, recognising the bank’s use of open sou..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "Red Hat",
+        "label": "ORG",
+        "start": 198,
+        "end": 205,
+        "context": "...ng Leong Bank as the Malaysian winner of the Red Hat APAC Innovation Awards 2026, recognising the..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "2026",
+        "label": "DATE",
+        "start": 229,
+        "end": 233,
+        "context": "...winner of the Red Hat APAC Innovation Awards 2026, recognising the bank’s use of open source t..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "This year’s awards",
+        "label": "DATE",
+        "start": 352,
+        "end": 370,
+        "context": "...infrastructure and improve digital services. This year’s awards, themed “Unlock what’s next,” recognise 32 o..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_010",
+        "text": "Asean",
+        "label": "ORG",
+        "start": 12,
+        "end": 17,
+        "context": "Giggs warns Asean nations naturalised players not quick fix\n\nK..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_010",
+        "text": "Asean",
+        "label": "NORP",
+        "start": 12,
+        "end": 17,
+        "context": "Giggs warns Asean nations naturalised players not quick fix\n\nK..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_010",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 61,
+        "end": 73,
+        "context": "...n nations naturalised players not quick fix\n\nKUALA LUMPUR: Manchester United icon Ryan Giggs has urged..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_010",
+        "text": "Manchester United",
+        "label": "ORG",
+        "start": 75,
+        "end": 92,
+        "context": "...ralised players not quick fix\n\nKUALA LUMPUR: Manchester United icon Ryan Giggs has urged Southeast Asian na..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_010",
+        "text": "Manchester United",
+        "label": "PERSON",
+        "start": 75,
+        "end": 92,
+        "context": "...ralised players not quick fix\n\nKUALA LUMPUR: Manchester United icon Ryan Giggs has urged Southeast Asian na..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_010",
+        "text": "Premier League",
+        "label": "ORG",
+        "start": 371,
+        "end": 385,
+        "context": "...ing to reporters in the capital, the 13-time Premier League winner addressed the accelerating trend acro..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_011",
+        "text": "80 sen",
+        "label": "MONEY",
+        "start": 25,
+        "end": 31,
+        "context": "Hong Leong Bank declares 80 sen final dividend\n\nby ANN ZAINUDDIN   HONG Leon..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_011",
+        "text": "80 sen",
+        "label": "MONEY",
+        "start": 132,
+        "end": 138,
+        "context": "...has declared a final single-tier dividend of 80 sen per share for the financial year ended June ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_011",
+        "text": "the financial year ended June 30, 2026",
+        "label": "DATE",
+        "start": 153,
+        "end": 191,
+        "context": "...single-tier dividend of 80 sen per share for the financial year ended June 30, 2026.   In a filing with Bursa Malaysia, the grou..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_011",
+        "text": "June 30, 2026",
+        "label": "DATE",
+        "start": 178,
+        "end": 191,
+        "context": "...0 sen per share for the financial year ended June 30, 2026.   In a filing with Bursa Malaysia, the grou..."
+      }
+    ],
+    "sample_errors": [
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank Ageas",
+        "label": "ORG",
+        "start": 18,
+        "end": 31,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (M..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "Maybank Ageas",
+        "label": "PERSON",
+        "start": 18,
+        "end": 31,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (M..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 40,
+        "end": 52,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Malayan Banking Bhd",
+        "label": "ORG",
+        "start": 54,
+        "end": 73,
+        "context": "...ompletes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of t..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "Malayan Banking Bhd",
+        "label": "PERSON",
+        "start": 54,
+        "end": 73,
+        "context": "...ompletes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of t..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 75,
+        "end": 82,
+        "context": "...s buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of the remain..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "30.95 per cent",
+        "label": "MONEY",
+        "start": 131,
+        "end": 145,
+        "context": "...s completed the acquisition of the remaining 30.95 per cent stake in Maybank Ageas Holdings Bhd. This gi..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Hong Leong",
+        "label": "ORG",
+        "start": 9,
+        "end": 19,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malays..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Hong Leong Win Best",
+        "label": "PERSON",
+        "start": 9,
+        "end": 28,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "CFO Honours",
+        "label": "ORG",
+        "start": 37,
+        "end": 48,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awa..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Bursa Malaysia Awards",
+        "label": "EVENT",
+        "start": 52,
+        "end": 73,
+        "context": "..., Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Bursa Malaysia Awards",
+        "label": "ORG",
+        "start": 52,
+        "end": 73,
+        "context": "..., Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Bursa Malaysia",
+        "label": "ORG",
+        "start": 75,
+        "end": 89,
+        "context": "...EO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO honours to Mayba..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Bursa",
+        "label": "GPE",
+        "start": 75,
+        "end": 80,
+        "context": "...EO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO honours..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Malaysia",
+        "label": "GPE",
+        "start": 81,
+        "end": 89,
+        "context": "... CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO honours to Mayba..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "CFO",
+        "label": "ORG",
+        "start": 114,
+        "end": 117,
+        "context": "...ards\n\nBursa Malaysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 129,
+        "end": 136,
+        "context": "...aysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leon..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Maybank’s Dato’ Sri Khairussaleh Ramli",
+        "label": "ORG",
+        "start": 129,
+        "end": 167,
+        "context": "...aysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The..."
+      }
+    ]
+  },
+  "trained": {
+    "matching": "exact-span+label",
+    "labels_evaluated": [
+      "DATE",
+      "EVENT",
+      "GPE",
+      "LOC",
+      "MONEY",
+      "NORP",
+      "ORG",
+      "PERSON"
+    ],
+    "examples": 12,
+    "gold_spans": 122,
+    "predicted_spans": 124,
+    "overall": {
+      "precision": 0.4839,
+      "recall": 0.4918,
+      "f1": 0.4878
+    },
+    "macro": {
+      "precision": 0.5123,
+      "recall": 0.5146,
+      "f1": 0.4941
+    },
+    "per_label": {
+      "DATE": {
+        "precision": 0.4828,
+        "recall": 0.875,
+        "f1": 0.6222,
+        "tp": 14,
+        "fp": 15,
+        "fn": 2,
+        "support": 16
+      },
+      "EVENT": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 1,
+        "fn": 9,
+        "support": 9
+      },
+      "GPE": {
+        "precision": 0.9231,
+        "recall": 0.6,
+        "f1": 0.7273,
+        "tp": 12,
+        "fp": 1,
+        "fn": 8,
+        "support": 20
+      },
+      "LOC": {
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "support": 3
+      },
+      "MONEY": {
+        "precision": 0.1667,
+        "recall": 0.1,
+        "f1": 0.125,
+        "tp": 1,
+        "fp": 5,
+        "fn": 9,
+        "support": 10
+      },
+      "NORP": {
+        "precision": 0.8,
+        "recall": 1.0,
+        "f1": 0.8889,
+        "tp": 4,
+        "fp": 1,
+        "fn": 0,
+        "support": 4
+      },
+      "ORG": {
+        "precision": 0.4314,
+        "recall": 0.4583,
+        "f1": 0.4444,
+        "tp": 22,
+        "fp": 29,
+        "fn": 26,
+        "support": 48
+      },
+      "PERSON": {
+        "precision": 0.2941,
+        "recall": 0.4167,
+        "f1": 0.3448,
+        "tp": 5,
+        "fp": 12,
+        "fn": 7,
+        "support": 12
+      }
+    },
+    "counts": {
+      "tp": 60,
+      "fp": 64,
+      "fn": 62
+    },
+    "errors": [
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank Ageas",
+        "label": "ORG",
+        "start": 18,
+        "end": 31,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (M..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "Maybank Ageas",
+        "label": "PERSON",
+        "start": 18,
+        "end": 31,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (M..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 40,
+        "end": 52,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Malayan Banking Bhd",
+        "label": "ORG",
+        "start": 54,
+        "end": 73,
+        "context": "...ompletes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of t..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "Malayan Banking Bhd",
+        "label": "PERSON",
+        "start": 54,
+        "end": 73,
+        "context": "...ompletes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of t..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 75,
+        "end": 82,
+        "context": "...s buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of the remain..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "30.95 per cent",
+        "label": "MONEY",
+        "start": 131,
+        "end": 145,
+        "context": "...s completed the acquisition of the remaining 30.95 per cent stake in Maybank Ageas Holdings Bhd. This gi..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Etiqa",
+        "label": "ORG",
+        "start": 258,
+        "end": 263,
+        "context": "...ull ownership of the holding company for its Etiqa insurance and takaful business in Malaysia a..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "Etiqa",
+        "label": "PERSON",
+        "start": 258,
+        "end": 263,
+        "context": "...ull ownership of the holding company for its Etiqa insurance and takaful business in Malaysia a..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Hong Leong",
+        "label": "ORG",
+        "start": 9,
+        "end": 19,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malays..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Hong Leong Win Best",
+        "label": "ORG",
+        "start": 9,
+        "end": 28,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "CFO Honours",
+        "label": "ORG",
+        "start": 37,
+        "end": 48,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awa..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Bursa Malaysia Awards",
+        "label": "EVENT",
+        "start": 52,
+        "end": 73,
+        "context": "..., Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Bursa Malaysia Awards",
+        "label": "ORG",
+        "start": 52,
+        "end": 73,
+        "context": "..., Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "CFO",
+        "label": "ORG",
+        "start": 114,
+        "end": 117,
+        "context": "...ards\n\nBursa Malaysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 129,
+        "end": 136,
+        "context": "...aysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leon..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Maybank’s Dato’ Sri Khairussaleh Ramli",
+        "label": "ORG",
+        "start": 129,
+        "end": 167,
+        "context": "...aysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Dato’ Sri Khairussaleh Ramli",
+        "label": "PERSON",
+        "start": 139,
+        "end": 167,
+        "context": "...ded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 172,
+        "end": 187,
+        "context": "...o Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The inaugural Bursa Mal..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Hong Leong Bank’s",
+        "label": "ORG",
+        "start": 172,
+        "end": 189,
+        "context": "...o Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The inaugural Bursa Malay..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Malkit Singh Maan",
+        "label": "PERSON",
+        "start": 190,
+        "end": 207,
+        "context": "...Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The inaugural Bursa Malaysia IR Awards 2026..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Bursa Malaysia IR Awards 2026",
+        "label": "EVENT",
+        "start": 223,
+        "end": 252,
+        "context": "...eong Bank’s Malkit Singh Maan. The inaugural Bursa Malaysia IR Awards 2026 took place on 4 September. Maybank received ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Bursa Malaysia IR Awards",
+        "label": "ORG",
+        "start": 223,
+        "end": 247,
+        "context": "...eong Bank’s Malkit Singh Maan. The inaugural Bursa Malaysia IR Awards 2026 took place on 4 September. Maybank rece..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "2026",
+        "label": "DATE",
+        "start": 248,
+        "end": 252,
+        "context": "...Maan. The inaugural Bursa Malaysia IR Awards 2026 took place on 4 September. Maybank received ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Investor Relations",
+        "label": "ORG",
+        "start": 333,
+        "end": 351,
+        "context": "...received four honours, including Best CEO in Investor Relations for its President and Group CEO Khairussaleh..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Group",
+        "label": "ORG",
+        "start": 374,
+        "end": 379,
+        "context": "... in Investor Relations for its President and Group CEO Khairussaleh. The bank also won Best Com..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Khairussaleh",
+        "label": "PERSON",
+        "start": 384,
+        "end": 396,
+        "context": "...or Relations for its President and Group CEO Khairussaleh. The bank also won Best Company in Investor ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Best Company",
+        "label": "ORG",
+        "start": 416,
+        "end": 428,
+        "context": "...nd Group CEO Khairussaleh. The bank also won Best Company in Investor Relations overall, Best Financia..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Investor Relations",
+        "label": "ORG",
+        "start": 432,
+        "end": 450,
+        "context": "...irussaleh. The bank also won Best Company in Investor Relations overall, Best Financial Reporting and Best L..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Best Financial Reporting",
+        "label": "ORG",
+        "start": 460,
+        "end": 484,
+        "context": "... Best Company in Investor Relations overall, Best Financial Reporting and Best Large-cap Company in Investor Relat..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Malkit",
+        "label": "PERSON",
+        "start": 558,
+        "end": 564,
+        "context": "...n Investor Relations for Financial Services. Malkit won Best CFO in Investor Relations. Hong Leo..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Best CFO",
+        "label": "ORG",
+        "start": 569,
+        "end": 577,
+        "context": "...Relations for Financial Services. Malkit won Best CFO in Investor Relations. Hong Leong Bank also ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Investor Relations",
+        "label": "ORG",
+        "start": 581,
+        "end": 599,
+        "context": "...r Financial Services. Malkit won Best CFO in Investor Relations. Hong Leong Bank also ranked among the top t..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_003",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 77,
+        "end": 89,
+        "context": "...rowth forecast to 5pct on domestic strength\n\nKUALA LUMPUR: CIMB Securities Research has raised its for..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "five per cent",
+        "label": "MONEY",
+        "start": 199,
+        "end": 212,
+        "context": "... 2026 gross domestic product (GDP) growth to five per cent from 4.8 per cent previously, backed by stro..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "4.8 per cent",
+        "label": "MONEY",
+        "start": 218,
+        "end": 230,
+        "context": "...c product (GDP) growth to five per cent from 4.8 per cent previously, backed by stronger-than-expected..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "IPI",
+        "label": "ORG",
+        "start": 365,
+        "end": 368,
+        "context": "...n-expected July Industrial Production Index (IPI) outturn, the third quarter (Q3) 2026 GDP no..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "the third quarter",
+        "label": "DATE",
+        "start": 379,
+        "end": 396,
+        "context": "...y Industrial Production Index (IPI) outturn, the third quarter (Q3) 2026 GDP nowcast has edged down to 5.0 ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_003",
+        "text": "third quarter (Q3) 2026",
+        "label": "DATE",
+        "start": 383,
+        "end": 406,
+        "context": "...dustrial Production Index (IPI) outturn, the third quarter (Q3) 2026 GDP nowcast has edged down to 5.0 per cent f..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "2026",
+        "label": "DATE",
+        "start": 402,
+        "end": 406,
+        "context": "... Index (IPI) outturn, the third quarter (Q3) 2026 GDP nowcast has edged down to 5.0 per cent f..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "5.0 per cent",
+        "label": "MONEY",
+        "start": 437,
+        "end": 449,
+        "context": "...rter (Q3) 2026 GDP nowcast has edged down to 5.0 per cent from 5.2 per cent,\" it said in a note."
+      },
+      {
+        "type": "FP",
+        "article": "eval_003",
+        "text": "5.2 per cent",
+        "label": "MONEY",
+        "start": 455,
+        "end": 467,
+        "context": "... nowcast has edged down to 5.0 per cent from 5.2 per cent,\" it said in a note."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Maybank completes RM2.5bil AT1 sukuk mudharabah issu..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "RM2.5bil",
+        "label": "MONEY",
+        "start": 18,
+        "end": 26,
+        "context": "Maybank completes RM2.5bil AT1 sukuk mudharabah issuance | KLSE Screene..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "KLSE Screener",
+        "label": "ORG",
+        "start": 59,
+        "end": 72,
+        "context": "...tes RM2.5bil AT1 sukuk mudharabah issuance | KLSE Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank)..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_004",
+        "text": "KLSE Screener\n\nKUALA",
+        "label": "PERSON",
+        "start": 59,
+        "end": 79,
+        "context": "...tes RM2.5bil AT1 sukuk mudharabah issuance | KLSE Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has co..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 74,
+        "end": 86,
+        "context": "...1 sukuk mudharabah issuance | KLSE Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "Malayan Banking Bhd",
+        "label": "ORG",
+        "start": 88,
+        "end": 107,
+        "context": "...abah issuance | KLSE Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the issuance of RM2...."
+      },
+      {
+        "type": "FP",
+        "article": "eval_004",
+        "text": "Malayan Banking Bhd",
+        "label": "PERSON",
+        "start": 88,
+        "end": 107,
+        "context": "...abah issuance | KLSE Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the issuance of RM2...."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 109,
+        "end": 116,
+        "context": "...Screener\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the issuance of RM2.5 billion..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "RM2.5 billion",
+        "label": "MONEY",
+        "start": 148,
+        "end": 161,
+        "context": "... Bhd (Maybank) has completed the issuance of RM2.5 billion additional tier 1 (AT1) sukuk mudharabah und..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_004",
+        "text": "today",
+        "label": "DATE",
+        "start": 257,
+        "end": 262,
+        "context": "... sukuk programme. In a Bursa Malaysia filing today, the banking group said the perpetual sukuk ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "RM1.10 billion",
+        "label": "MONEY",
+        "start": 369,
+        "end": 383,
+        "context": "...eries with nominal amounts of RM750 million, RM1.10 billion and RM650 million, respectively."
+      },
+      {
+        "type": "FN",
+        "article": "eval_004",
+        "text": "RM650 million",
+        "label": "MONEY",
+        "start": 388,
+        "end": 401,
+        "context": "...amounts of RM750 million, RM1.10 billion and RM650 million, respectively."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "RM138,600",
+        "label": "MONEY",
+        "start": 21,
+        "end": 30,
+        "context": "HLB Islamic channels RM138,600 to SURI entrepreneurs under iTEKAD | KLSE Sc..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "SURI",
+        "label": "ORG",
+        "start": 34,
+        "end": 38,
+        "context": "HLB Islamic channels RM138,600 to SURI entrepreneurs under iTEKAD | KLSE Screener\n\n..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "KLSE Screener",
+        "label": "ORG",
+        "start": 68,
+        "end": 81,
+        "context": "...138,600 to SURI entrepreneurs under iTEKAD | KLSE Screener\n\nKUALA LUMPUR: HLB Islamic has channelled RM..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_005",
+        "text": "KLSE Screener\n\nKUALA",
+        "label": "PERSON",
+        "start": 68,
+        "end": 88,
+        "context": "...138,600 to SURI entrepreneurs under iTEKAD | KLSE Screener\n\nKUALA LUMPUR: HLB Islamic has channelled RM138,600..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 83,
+        "end": 95,
+        "context": "... entrepreneurs under iTEKAD | KLSE Screener\n\nKUALA LUMPUR: HLB Islamic has channelled RM138,600 in soc..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "RM138,600",
+        "label": "MONEY",
+        "start": 124,
+        "end": 133,
+        "context": "...er\n\nKUALA LUMPUR: HLB Islamic has channelled RM138,600 in social financing to social enterprise SUR..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_005",
+        "text": "RM138,600",
+        "label": "ORG",
+        "start": 124,
+        "end": 133,
+        "context": "...er\n\nKUALA LUMPUR: HLB Islamic has channelled RM138,600 in social financing to social enterprise SUR..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "SURI Inspirasi",
+        "label": "ORG",
+        "start": 175,
+        "end": 189,
+        "context": "...600 in social financing to social enterprise SURI Inspirasi under Bank Negara Malaysia’s (BNM) iTEKAD fr..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "Bank Negara Malaysia",
+        "label": "ORG",
+        "start": 196,
+        "end": 216,
+        "context": "...ng to social enterprise SURI Inspirasi under Bank Negara Malaysia’s (BNM) iTEKAD framework. In a statement, th..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_005",
+        "text": "Bank Negara Malaysia’s",
+        "label": "ORG",
+        "start": 196,
+        "end": 218,
+        "context": "...ng to social enterprise SURI Inspirasi under Bank Negara Malaysia’s (BNM) iTEKAD framework. In a statement, the ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "SURI",
+        "label": "ORG",
+        "start": 289,
+        "end": 293,
+        "context": "...n a statement, the bank said participants in SURI’s Sustainable Reliable Income (SRI) programm..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_005",
+        "text": "monthly",
+        "label": "DATE",
+        "start": 376,
+        "end": 383,
+        "context": "...rogramme recorded an average 94% increase in monthly income and generated more than RM14,000 in t..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_005",
+        "text": "RM14,000",
+        "label": "MONEY",
+        "start": 415,
+        "end": 423,
+        "context": "...se in monthly income and generated more than RM14,000 in total new earnings. The programme trains ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_006",
+        "text": "Bandung",
+        "label": "GPE",
+        "start": 0,
+        "end": 7,
+        "context": "Bandung 1955: What happens when countries stand up t..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_007",
+        "text": "F1",
+        "label": "EVENT",
+        "start": 5,
+        "end": 7,
+        "context": "From F1 to the World Cup: How Anwar is using sport a..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "F1",
+        "label": "GPE",
+        "start": 5,
+        "end": 7,
+        "context": "From F1 to the World Cup: How Anwar is using sport a..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "the World Cup",
+        "label": "EVENT",
+        "start": 11,
+        "end": 24,
+        "context": "From F1 to the World Cup: How Anwar is using sport as diplomacy to pu..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_007",
+        "text": "World Cup",
+        "label": "EVENT",
+        "start": 15,
+        "end": 24,
+        "context": "From F1 to the World Cup: How Anwar is using sport as diplomacy to pu..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_007",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 100,
+        "end": 112,
+        "context": "...iplomacy to put Malaysia on the world stage\n\nKUALA LUMPUR, Oct 4 — Prime Minister Datuk Seri Anwar Ibr..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_007",
+        "text": "Datuk Seri Anwar Ibrahim",
+        "label": "PERSON",
+        "start": 137,
+        "end": 161,
+        "context": "... stage\n\nKUALA LUMPUR, Oct 4 — Prime Minister Datuk Seri Anwar Ibrahim’s approach of leveraging sports as a platfor..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "Datuk Seri",
+        "label": "PERSON",
+        "start": 137,
+        "end": 147,
+        "context": "... stage\n\nKUALA LUMPUR, Oct 4 — Prime Minister Datuk Seri Anwar Ibrahim’s approach of leveraging sport..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "Anwar Ibrahim’s",
+        "label": "PERSON",
+        "start": 148,
+        "end": 163,
+        "context": "...LA LUMPUR, Oct 4 — Prime Minister Datuk Seri Anwar Ibrahim’s approach of leveraging sports as a platform ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_007",
+        "text": "Prof Dr Mohd Mizan Mohammad Aslam",
+        "label": "PERSON",
+        "start": 395,
+        "end": 428,
+        "context": "...Global Peace Institute, London senior fellow Prof Dr Mohd Mizan Mohammad Aslam said Malaysia had, in recent months, demonst..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "Prof Dr",
+        "label": "PERSON",
+        "start": 395,
+        "end": 402,
+        "context": "...Global Peace Institute, London senior fellow Prof Dr Mohd Mizan Mohammad Aslam said Malaysia had,..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "Mohd Mizan Mohammad Aslam",
+        "label": "PERSON",
+        "start": 403,
+        "end": 428,
+        "context": "...eace Institute, London senior fellow Prof Dr Mohd Mizan Mohammad Aslam said Malaysia had, in recent months, demonst..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_007",
+        "text": "recent months",
+        "label": "DATE",
+        "start": 451,
+        "end": 464,
+        "context": "...d Mizan Mohammad Aslam said Malaysia had, in recent months, demonstrated how global sporting events cou..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "BERNAMA",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "BERNAMA - Maybank Group Sustainability Week 2026 Adv..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "BERNAMA - Maybank Group Sustainability",
+        "label": "ORG",
+        "start": 0,
+        "end": 38,
+        "context": "BERNAMA - Maybank Group Sustainability Week 2026 Advances Net Zero Ambitions Throug..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "Maybank Group Sustainability Week 2026",
+        "label": "EVENT",
+        "start": 10,
+        "end": 48,
+        "context": "BERNAMA - Maybank Group Sustainability Week 2026 Advances Net Zero Ambitions Through Capacity..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "Week 2026",
+        "label": "DATE",
+        "start": 39,
+        "end": 48,
+        "context": "BERNAMA - Maybank Group Sustainability Week 2026 Advances Net Zero Ambitions Through Capacity..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 126,
+        "end": 138,
+        "context": "...ugh Capacity Building and Collective Action\n\nKUALA LUMPUR, Sept 25 (Bernama) -- Maybank recently organ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "the Maybank Group Sustainability Week",
+        "label": "ORG",
+        "start": 188,
+        "end": 225,
+        "context": "...t 25 (Bernama) -- Maybank recently organised the Maybank Group Sustainability Week (MGSW) 2026, a three-day programme held from..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "Maybank Group Sustainability Week (MGSW) 2026",
+        "label": "EVENT",
+        "start": 192,
+        "end": 237,
+        "context": "... (Bernama) -- Maybank recently organised the Maybank Group Sustainability Week (MGSW) 2026, a three-day programme held from 21 to 23 Se..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "MGSW",
+        "label": "ORG",
+        "start": 227,
+        "end": 231,
+        "context": "...nised the Maybank Group Sustainability Week (MGSW) 2026, a three-day programme held from 21 to..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "2026",
+        "label": "DATE",
+        "start": 233,
+        "end": 237,
+        "context": "...the Maybank Group Sustainability Week (MGSW) 2026, a three-day programme held from 21 to 23 Se..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "three-day",
+        "label": "DATE",
+        "start": 241,
+        "end": 250,
+        "context": "...ank Group Sustainability Week (MGSW) 2026, a three-day programme held from 21 to 23 September 2026 ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "Menara Merdeka Maybank",
+        "label": "LOC",
+        "start": 298,
+        "end": 320,
+        "context": "...ogramme held from 21 to 23 September 2026 at Menara Merdeka Maybank. Under the theme “Net Zero. From Commitment ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "Menara Merdeka Maybank",
+        "label": "ORG",
+        "start": 298,
+        "end": 320,
+        "context": "...ogramme held from 21 to 23 September 2026 at Menara Merdeka Maybank. Under the theme “Net Zero. From Commitment ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "Commitment to Action",
+        "label": "ORG",
+        "start": 354,
+        "end": 374,
+        "context": "...eka Maybank. Under the theme “Net Zero. From Commitment to Action”, MGSW 2026 focuses on advancing Maybank’s n..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_008",
+        "text": "MGSW 2026",
+        "label": "EVENT",
+        "start": 377,
+        "end": 386,
+        "context": "...theme “Net Zero. From Commitment to Action”, MGSW 2026 focuses on advancing Maybank’s net zero jour..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "2026",
+        "label": "DATE",
+        "start": 382,
+        "end": 386,
+        "context": "... “Net Zero. From Commitment to Action”, MGSW 2026 focuses on advancing Maybank’s net zero jour..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_008",
+        "text": "Group",
+        "label": "ORG",
+        "start": 522,
+        "end": 527,
+        "context": "...awareness and capabilities, in line with the Group’s ROAR30 sustainability ambitions."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "Red Hat",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Red Hat Recognises Hong Leong Bank at APAC Innovatio..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 19,
+        "end": 34,
+        "context": "Red Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026\n\nRed Hat Reco..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "APAC Innovation Awards 2026",
+        "label": "EVENT",
+        "start": 38,
+        "end": 65,
+        "context": "Red Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026\n\nRed Hat Recognises Hong Leong Bank at APAC ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "APAC Innovation Awards",
+        "label": "ORG",
+        "start": 38,
+        "end": 60,
+        "context": "Red Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026\n\nRed Hat Recognises Hong Leong Bank at ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "2026",
+        "label": "DATE",
+        "start": 61,
+        "end": 65,
+        "context": "...es Hong Leong Bank at APAC Innovation Awards 2026\n\nRed Hat Recognises Hong Leong Bank at APAC ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "Red Hat",
+        "label": "ORG",
+        "start": 67,
+        "end": 74,
+        "context": "...g Leong Bank at APAC Innovation Awards 2026\n\nRed Hat Recognises Hong Leong Bank at APAC Innovatio..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 86,
+        "end": 101,
+        "context": "...C Innovation Awards 2026\n\nRed Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026 Red Hat has n..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "APAC Innovation Awards 2026",
+        "label": "EVENT",
+        "start": 105,
+        "end": 132,
+        "context": "... 2026\n\nRed Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026 Red Hat has named Hong Leong Bank as the Mal..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "APAC Innovation Awards",
+        "label": "ORG",
+        "start": 105,
+        "end": 127,
+        "context": "... 2026\n\nRed Hat Recognises Hong Leong Bank at APAC Innovation Awards 2026 Red Hat has named Hong Leong Bank as th..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "2026",
+        "label": "DATE",
+        "start": 128,
+        "end": 132,
+        "context": "...es Hong Leong Bank at APAC Innovation Awards 2026 Red Hat has named Hong Leong Bank as the Mal..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "Hong Leong Bank",
+        "label": "ORG",
+        "start": 151,
+        "end": 166,
+        "context": "...PAC Innovation Awards 2026 Red Hat has named Hong Leong Bank as the Malaysian winner of the Red Hat APAC ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "the Red Hat APAC Innovation Awards",
+        "label": "ORG",
+        "start": 194,
+        "end": 228,
+        "context": "...d Hong Leong Bank as the Malaysian winner of the Red Hat APAC Innovation Awards 2026, recognising the bank’s use of open sou..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_009",
+        "text": "Red Hat",
+        "label": "ORG",
+        "start": 198,
+        "end": 205,
+        "context": "...ng Leong Bank as the Malaysian winner of the Red Hat APAC Innovation Awards 2026, recognising the..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "2026",
+        "label": "DATE",
+        "start": 229,
+        "end": 233,
+        "context": "...winner of the Red Hat APAC Innovation Awards 2026, recognising the bank’s use of open source t..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "year",
+        "label": "DATE",
+        "start": 357,
+        "end": 361,
+        "context": "...structure and improve digital services. This year’s awards, themed “Unlock what’s next,” recog..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_009",
+        "text": "Unlock",
+        "label": "PERSON",
+        "start": 380,
+        "end": 386,
+        "context": "...igital services. This year’s awards, themed “Unlock what’s next,” recognise 32 organisations acr..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_010",
+        "text": "Asean",
+        "label": "ORG",
+        "start": 12,
+        "end": 17,
+        "context": "Giggs warns Asean nations naturalised players not quick fix\n\nK..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_010",
+        "text": "Asean",
+        "label": "NORP",
+        "start": 12,
+        "end": 17,
+        "context": "Giggs warns Asean nations naturalised players not quick fix\n\nK..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_010",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 61,
+        "end": 73,
+        "context": "...n nations naturalised players not quick fix\n\nKUALA LUMPUR: Manchester United icon Ryan Giggs has urged..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_010",
+        "text": "Manchester United",
+        "label": "ORG",
+        "start": 75,
+        "end": 92,
+        "context": "...ralised players not quick fix\n\nKUALA LUMPUR: Manchester United icon Ryan Giggs has urged Southeast Asian na..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_010",
+        "text": "Manchester United",
+        "label": "PERSON",
+        "start": 75,
+        "end": 92,
+        "context": "...ralised players not quick fix\n\nKUALA LUMPUR: Manchester United icon Ryan Giggs has urged Southeast Asian na..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_011",
+        "text": "80 sen",
+        "label": "MONEY",
+        "start": 25,
+        "end": 31,
+        "context": "Hong Leong Bank declares 80 sen final dividend\n\nby ANN ZAINUDDIN   HONG Leon..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_011",
+        "text": "ANN ZAINUDDIN",
+        "label": "PERSON",
+        "start": 51,
+        "end": 64,
+        "context": "...eong Bank declares 80 sen final dividend\n\nby ANN ZAINUDDIN   HONG Leong Bank Bhd has declared a final s..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_011",
+        "text": "ANN ZAINUDDIN",
+        "label": "ORG",
+        "start": 51,
+        "end": 64,
+        "context": "...eong Bank declares 80 sen final dividend\n\nby ANN ZAINUDDIN   HONG Leong Bank Bhd has declared a final s..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_011",
+        "text": "80 sen",
+        "label": "MONEY",
+        "start": 132,
+        "end": 138,
+        "context": "...has declared a final single-tier dividend of 80 sen per share for the financial year ended June ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_011",
+        "text": "the financial year ended June 30, 2026",
+        "label": "DATE",
+        "start": 153,
+        "end": 191,
+        "context": "...single-tier dividend of 80 sen per share for the financial year ended June 30, 2026.   In a filing with Bursa Malaysia, the grou..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_011",
+        "text": "June 30, 2026",
+        "label": "DATE",
+        "start": 178,
+        "end": 191,
+        "context": "...0 sen per share for the financial year ended June 30, 2026.   In a filing with Bursa Malaysia, the grou..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_012",
+        "text": "Asset Quality Risks Build",
+        "label": "ORG",
+        "start": 49,
+        "end": 74,
+        "context": "...ysts Stay Neutral On Banks As Funding Costs, Asset Quality Risks Build\n\nThe research house also flagged the potenti..."
+      }
+    ],
+    "sample_errors": [
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank Ageas",
+        "label": "ORG",
+        "start": 18,
+        "end": 31,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (M..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "Maybank Ageas",
+        "label": "PERSON",
+        "start": 18,
+        "end": 31,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (M..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "KUALA LUMPUR",
+        "label": "GPE",
+        "start": 40,
+        "end": 52,
+        "context": "Maybank completes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Malayan Banking Bhd",
+        "label": "ORG",
+        "start": 54,
+        "end": 73,
+        "context": "...ompletes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of t..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "Malayan Banking Bhd",
+        "label": "PERSON",
+        "start": 54,
+        "end": 73,
+        "context": "...ompletes Maybank Ageas buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of t..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 75,
+        "end": 82,
+        "context": "...s buyout\n\nKUALA LUMPUR: Malayan Banking Bhd (Maybank) has completed the acquisition of the remain..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "30.95 per cent",
+        "label": "MONEY",
+        "start": 131,
+        "end": 145,
+        "context": "...s completed the acquisition of the remaining 30.95 per cent stake in Maybank Ageas Holdings Bhd. This gi..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_001",
+        "text": "Etiqa",
+        "label": "ORG",
+        "start": 258,
+        "end": 263,
+        "context": "...ull ownership of the holding company for its Etiqa insurance and takaful business in Malaysia a..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_001",
+        "text": "Etiqa",
+        "label": "PERSON",
+        "start": 258,
+        "end": 263,
+        "context": "...ull ownership of the holding company for its Etiqa insurance and takaful business in Malaysia a..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 0,
+        "end": 7,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Hong Leong",
+        "label": "ORG",
+        "start": 9,
+        "end": 19,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malays..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Hong Leong Win Best",
+        "label": "ORG",
+        "start": 9,
+        "end": 28,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "CFO Honours",
+        "label": "ORG",
+        "start": 37,
+        "end": 48,
+        "context": "Maybank, Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awa..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Bursa Malaysia Awards",
+        "label": "EVENT",
+        "start": 52,
+        "end": 73,
+        "context": "..., Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Bursa Malaysia Awards",
+        "label": "ORG",
+        "start": 52,
+        "end": 73,
+        "context": "..., Hong Leong Win Best CEO and CFO Honours at Bursa Malaysia Awards\n\nBursa Malaysia awarded its top CEO and CFO ..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "CFO",
+        "label": "ORG",
+        "start": 114,
+        "end": 117,
+        "context": "...ards\n\nBursa Malaysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh ..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Maybank",
+        "label": "ORG",
+        "start": 129,
+        "end": 136,
+        "context": "...aysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leon..."
+      },
+      {
+        "type": "FP",
+        "article": "eval_002",
+        "text": "Maybank’s Dato’ Sri Khairussaleh Ramli",
+        "label": "ORG",
+        "start": 129,
+        "end": 167,
+        "context": "...aysia awarded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The..."
+      },
+      {
+        "type": "FN",
+        "article": "eval_002",
+        "text": "Dato’ Sri Khairussaleh Ramli",
+        "label": "PERSON",
+        "start": 139,
+        "end": 167,
+        "context": "...ded its top CEO and CFO honours to Maybank’s Dato’ Sri Khairussaleh Ramli and Hong Leong Bank’s Malkit Singh Maan. The..."
+      }
+    ]
+  }
+}

@@ -1,497 +1,603 @@
 """
-Annotation, Data Splitting, and Model Training Pipeline
-========================================================
-Steps:
-  1. Load English articles from CSVs
-  2. Auto-annotate with spaCy baseline (weak supervision) 
-  3. Human-review prompt (skipped in automated run)
-  4. Split 70/15/15 by article identity
-  5. Convert to spaCy DocBin format
-  6. Fine-tune (update) the model on training set
-  7. Evaluate on validation and test sets
-  8. Save trained model to data/trained_model/
+Annotation, data splitting, validation-based model selection, and training.
 
-Run: python src/annotate_and_train.py
+Pipeline
+--------
+1. Load English articles from the provided CSV files.
+2. Remove exact duplicates and group near-duplicates (see ``data_loader.py``).
+3. Auto-annotate with the baseline spaCy model (weak supervision).
+4. Split by near-duplicate cluster / article identity, 70/15/15, seed 42.
+5. Fine-tune ``en_core_web_sm`` with two documented configurations.
+6. Evaluate validation after every epoch and keep the best epoch per config.
+7. Select the final configuration by validation exact-span F1.
+8. Evaluate the untouched human-reviewed test set exactly once.
+9. Save the selected model and a text-free ``annotations.jsonl``.
+
+The human-reviewed test set lives in ``data/evaluation_examples.json``.  It is
+never used for training or model selection.
 """
 
-import os, sys, json, random, logging, time
-from typing import List, Dict, Any, Tuple
+from __future__ import annotations
+
+import hashlib
+import json
+import logging
+import os
+import random
+import shutil
+import sys
+import time
+from collections import defaultdict
+from typing import Any, Dict, List, Tuple
 
 import spacy
-from spacy.tokens import DocBin
 from spacy.training import Example
 
 sys.path.insert(0, os.path.dirname(__file__))
 from data_loader import load_all
+from evaluation import EVAL_LABELS, evaluate, load_eval_examples
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
 SEED = 42
-random.seed(SEED)
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(PROJECT_DIR, "data")
 MODEL_OUT = os.path.join(DATA_DIR, "trained_model")
 ANNOT_PATH = os.path.join(DATA_DIR, "annotations.jsonl")
-EVAL_PATH  = os.path.join(DATA_DIR, "evaluation_examples.json")
+EVAL_PATH = os.path.join(DATA_DIR, "evaluation_examples.json")
+
+# Two documented configurations.  Validation picks both the best epoch and the
+# winning configuration.  We deliberately keep this small so a CPU-only
+# reproduction stays practical.
+TRAINING_CONFIGS = [
+    {"name": "dropout_0.35_batch_8", "dropout": 0.35, "batch_size": 8, "epochs": 3},
+    {"name": "dropout_0.25_batch_8", "dropout": 0.25, "batch_size": 8, "epochs": 3},
+]
 
 os.makedirs(DATA_DIR, exist_ok=True)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 1. Load data
-# ─────────────────────────────────────────────────────────────────────────────
 
-def load_articles() -> List[Dict]:
-    logger.info("Loading articles from CSV files…")
+# ---------------------------------------------------------------------------
+# Loading and weak annotation
+# ---------------------------------------------------------------------------
+
+def load_articles() -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    logger.info("Loading articles from CSV files...")
     articles, report = load_all()
-    logger.info(f"Total loaded: {report['total_rows']} rows | duplicates removed: {report['total_duplicates']}")
-    logger.info(f"Language distribution: {report['language_distribution']}")
-    logger.info(f"Missing titles: {report['missing_title']} | Missing bodies: {report['missing_body']}")
-    # Focus on English for the NER model
-    en_articles = [a for a in articles if a["language"] == "en"]
-    logger.info(f"English articles: {len(en_articles)}")
-    return en_articles
+    logger.info(
+        "Loaded %s unique articles from %s raw rows | duplicates removed: %s "
+        "(id=%s, content=%s)",
+        report["total_rows"],
+        report["raw_rows"],
+        report["total_duplicates"],
+        report["total_id_duplicates"],
+        report["total_content_duplicates"],
+    )
+    logger.info("Language distribution: %s", report["language_distribution"])
+    logger.info(
+        "Missing titles: %s | Missing bodies: %s | Non-empty entities column: %s",
+        report["missing_title"],
+        report["missing_body"],
+        report["entities_nonempty"],
+    )
+    logger.info(
+        "Near-duplicate audit: %s clusters, %s multi-document clusters, largest=%s",
+        report["near_duplicate_audit"]["clusters"],
+        report["near_duplicate_audit"]["multi_document_clusters"],
+        report["near_duplicate_audit"]["largest_cluster_size"],
+    )
+    english_articles = [article for article in articles if article["language"] == "en"]
+    logger.info("English articles used for NER: %s", len(english_articles))
+    return english_articles, report
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 2. Auto-annotate (weak supervision via baseline spaCy)
-# ─────────────────────────────────────────────────────────────────────────────
-
-def auto_annotate(articles: List[Dict], nlp) -> List[Dict]:
+def auto_annotate(articles: List[Dict[str, Any]], nlp) -> List[Dict[str, Any]]:
     """
-    Run the baseline spaCy model to produce initial annotations.
-    These are *weak labels* - they require human review for evaluation set.
-    Entity spans stored as (start, end, label) tuples.
+    Run the baseline spaCy model to produce weak labels.
+
+    These are *not* gold labels.  They are the training signal for this
+    prototype and are recorded as ``label_source = weak_baseline``.
     """
-    logger.info("Running auto-annotation with baseline model…")
+    logger.info("Running auto-annotation with baseline model...")
     annotated = []
-    for art in articles:
-        combined = f"{art['title'].strip()}\n\n{art['body'].strip()}"
+    for article in articles:
+        combined = f"{article['title'].strip()}\n\n{article['body'].strip()}"
         doc = nlp(combined)
         spans = [(ent.start_char, ent.end_char, ent.label_) for ent in doc.ents]
-        annotated.append({
-            **art,
-            "combined_text": combined,
-            "spans": spans,
-            "human_reviewed": False,
-        })
-    logger.info(f"Auto-annotated {len(annotated)} articles")
+        annotated.append(
+            {
+                **article,
+                "combined_text": combined,
+                "spans": spans,
+                "human_reviewed": False,
+                "label_source": "weak_baseline",
+            }
+        )
+    logger.info("Auto-annotated %s articles", len(annotated))
     return annotated
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 3. Build Evaluation Set (10 manually-reviewed examples)
-# ─────────────────────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Splitting
+# ---------------------------------------------------------------------------
 
-# These 10 examples were selected from the dataset and manually reviewed.
-# They cover: people, orgs, places, dates, ambiguous names, no-entity cases.
-EVALUATION_EXAMPLES = [
-    {
-        "id": "eval_001",
-        "source": "Maybank Group",
-        "title": "Maybank posts higher net profit of RM2.5b in Q3 2026",
-        "body": "Kuala Lumpur: Maybank Group reported a net profit of RM2.5 billion for the third quarter of 2026, up 8% from the same period last year. Group president and CEO Datuk Khairussaleh Ramli said the growth was driven by strong loan growth and improved asset quality. The bank's total assets grew to RM1.2 trillion.",
-        "gold_entities": [
-            {"text": "Maybank Group", "label": "ORG", "start": 0, "end": 13},
-            {"text": "RM2.5 billion", "label": "MONEY", "start": 60, "end": 73},
-            {"text": "third quarter of 2026", "label": "DATE", "start": 82, "end": 103},
-            {"text": "Datuk Khairussaleh Ramli", "label": "PERSON", "start": 155, "end": 179},
-            {"text": "RM1.2 trillion", "label": "MONEY", "start": 252, "end": 266},
-            {"text": "Kuala Lumpur", "label": "GPE", "start": 0, "end": 12},
-        ],
-        "notes": "Standard financial news. Clear ORG, PERSON, MONEY, DATE entities.",
-        "difficulty": "easy"
-    },
-    {
-        "id": "eval_002",
-        "source": "CIMB Group Malaysia",
-        "title": "CIMB Group wins Best Bank in Malaysia award at Euromoney Awards",
-        "body": "CIMB Group has been named the Best Bank in Malaysia at the Euromoney Awards for Excellence 2026, held in London. This marks the third consecutive year CIMB has received this recognition. Group CEO Tengku Datuk Seri Zafrul Abdul Aziz said the award reflects the bank's transformation journey.",
-        "gold_entities": [
-            {"text": "CIMB Group", "label": "ORG", "start": 0, "end": 10},
-            {"text": "Malaysia", "label": "GPE", "start": 32, "end": 40},
-            {"text": "Euromoney Awards for Excellence 2026", "label": "EVENT", "start": 55, "end": 91},
-            {"text": "London", "label": "GPE", "start": 101, "end": 107},
-            {"text": "Tengku Datuk Seri Zafrul Abdul Aziz", "label": "PERSON", "start": 192, "end": 227},
-        ],
-        "notes": "Award event entity; noble title before person name (ambiguous).",
-        "difficulty": "medium"
-    },
-    {
-        "id": "eval_003",
-        "source": "Hong Leong Bank",
-        "title": "Hong Leong Bank launches digital banking platform HLB Connect",
-        "body": "Hong Leong Bank Berhad (HLB) today launched HLB Connect, its revamped digital banking platform, at its headquarters in Kuala Lumpur. The launch was attended by Bank Negara Malaysia deputy governor Jessica Chew and more than 200 industry guests.",
-        "gold_entities": [
-            {"text": "Hong Leong Bank Berhad", "label": "ORG", "start": 0, "end": 22},
-            {"text": "HLB", "label": "ORG", "start": 24, "end": 27},
-            {"text": "HLB Connect", "label": "ORG", "start": 44, "end": 55},
-            {"text": "Kuala Lumpur", "label": "GPE", "start": 117, "end": 129},
-            {"text": "Bank Negara Malaysia", "label": "ORG", "start": 159, "end": 179},
-            {"text": "Jessica Chew", "label": "PERSON", "start": 196, "end": 208},
-        ],
-        "notes": "Abbreviation ORG and product name ORG. Ambiguous 'HLB Connect'.",
-        "difficulty": "medium"
-    },
-    {
-        "id": "eval_004",
-        "source": "RHB Bank",
-        "title": "RHB Bank partners with Grab for SME financing solutions",
-        "body": "RHB Bank and Grab Financial Group announced a strategic partnership on 15 September 2026 to offer SME financing solutions across Malaysia, Singapore, and Thailand. The collaboration aims to serve 100,000 small businesses by end of 2027.",
-        "gold_entities": [
-            {"text": "RHB Bank", "label": "ORG", "start": 0, "end": 8},
-            {"text": "Grab Financial Group", "label": "ORG", "start": 25, "end": 45},
-            {"text": "15 September 2026", "label": "DATE", "start": 78, "end": 95},
-            {"text": "Malaysia", "label": "GPE", "start": 137, "end": 145},
-            {"text": "Singapore", "label": "GPE", "start": 147, "end": 156},
-            {"text": "Thailand", "label": "GPE", "start": 162, "end": 170},
-            {"text": "end of 2027", "label": "DATE", "start": 226, "end": 237},
-        ],
-        "notes": "Multiple GPE entities. Date with full format.",
-        "difficulty": "easy"
-    },
-    {
-        "id": "eval_005",
-        "source": "Maybank Foundation",
-        "title": "Maybank Foundation awards scholarships to 500 students",
-        "body": "Maybank Foundation today awarded scholarships worth RM10 million to 500 university students across ASEAN during a ceremony at Menara Maybank, Kuala Lumpur. Maybank Foundation chairperson Dato Mohaiyani Shamsudin handed the awards to recipients from Malaysia, Indonesia, and the Philippines.",
-        "gold_entities": [
-            {"text": "Maybank Foundation", "label": "ORG", "start": 0, "end": 18},
-            {"text": "RM10 million", "label": "MONEY", "start": 51, "end": 63},
-            {"text": "ASEAN", "label": "ORG", "start": 99, "end": 104},
-            {"text": "Menara Maybank", "label": "LOC", "start": 124, "end": 138},
-            {"text": "Kuala Lumpur", "label": "GPE", "start": 140, "end": 152},
-            {"text": "Dato Mohaiyani Shamsudin", "label": "PERSON", "start": 185, "end": 209},
-            {"text": "Malaysia", "label": "GPE", "start": 241, "end": 249},
-            {"text": "Indonesia", "label": "GPE", "start": 251, "end": 260},
-            {"text": "the Philippines", "label": "GPE", "start": 266, "end": 281},
-        ],
-        "notes": "ASEAN can be ORG or NORP; Menara Maybank is a building (LOC).",
-        "difficulty": "hard"
-    },
-    {
-        "id": "eval_006",
-        "source": "MDV",
-        "title": "MDV approves RM500 million in venture funding for tech startups",
-        "body": "Malaysia Venture Capital Management Berhad (MDV) has approved RM500 million in venture capital funding for technology startups in Malaysia for the fiscal year 2026-2027. The announcement was made by Minister of Finance II Datuk Seri Ahmad Maslan during the National Budget Forum in Putrajaya.",
-        "gold_entities": [
-            {"text": "Malaysia Venture Capital Management Berhad", "label": "ORG", "start": 0, "end": 42},
-            {"text": "MDV", "label": "ORG", "start": 44, "end": 47},
-            {"text": "RM500 million", "label": "MONEY", "start": 61, "end": 74},
-            {"text": "Malaysia", "label": "GPE", "start": 137, "end": 145},
-            {"text": "2026-2027", "label": "DATE", "start": 162, "end": 171},
-            {"text": "Datuk Seri Ahmad Maslan", "label": "PERSON", "start": 221, "end": 244},
-            {"text": "National Budget Forum", "label": "EVENT", "start": 252, "end": 273},
-            {"text": "Putrajaya", "label": "GPE", "start": 277, "end": 286},
-        ],
-        "notes": "Long official org name with acronym. Fiscal year range as DATE.",
-        "difficulty": "medium"
-    },
-    {
-        "id": "eval_007",
-        "source": "Maybank CSR",
-        "title": "Maybank launches Go Green initiative to plant 100,000 trees",
-        "body": "As part of its corporate social responsibility (CSR) commitments, Maybank launched the Go Green initiative in partnership with WWF-Malaysia and the Ministry of Natural Resources and Environment. The programme targets planting 100,000 trees across Peninsular Malaysia, Sabah, and Sarawak by December 2026.",
-        "gold_entities": [
-            {"text": "Maybank", "label": "ORG", "start": 65, "end": 72},
-            {"text": "WWF-Malaysia", "label": "ORG", "start": 120, "end": 132},
-            {"text": "Ministry of Natural Resources and Environment", "label": "ORG", "start": 141, "end": 186},
-            {"text": "Peninsular Malaysia", "label": "GPE", "start": 245, "end": 264},
-            {"text": "Sabah", "label": "GPE", "start": 266, "end": 271},
-            {"text": "Sarawak", "label": "GPE", "start": 277, "end": 284},
-            {"text": "December 2026", "label": "DATE", "start": 289, "end": 302},
-        ],
-        "notes": "Hyphenated org name. Malaysian geographic regions.",
-        "difficulty": "medium"
-    },
-    {
-        "id": "eval_008",
-        "source": "CIMB Group Malaysia",
-        "title": "Banking sector outlook remains stable amid global headwinds",
-        "body": "The Malaysian banking sector continues to demonstrate resilience amid global economic headwinds, according to a report released by the International Monetary Fund (IMF) on October 2026. Capital adequacy ratios remain well above regulatory minimums, and non-performing loan ratios stayed at historical lows.",
-        "gold_entities": [
-            {"text": "International Monetary Fund", "label": "ORG", "start": 143, "end": 169},
-            {"text": "IMF", "label": "ORG", "start": 171, "end": 174},
-            {"text": "October 2026", "label": "DATE", "start": 179, "end": 191},
-        ],
-        "notes": "Challenging: minimal named entities. Tests recall (false negatives).",
-        "difficulty": "hard"
-    },
-    {
-        "id": "eval_009",
-        "source": "Maybank Group",
-        "title": "Maybank appoints new Group CFO effective January 2027",
-        "body": "Maybank today announced the appointment of Encik Amirul Feisal Wan Zahir as the new Group Chief Financial Officer (CFO), effective 1 January 2027. Amirul Feisal replaces Datuk Fadzillah Kamaruddin who will retire after 20 years of service. Amirul Feisal previously served as the CFO of Maybank Islamic.",
-        "gold_entities": [
-            {"text": "Maybank", "label": "ORG", "start": 0, "end": 7},
-            {"text": "Encik Amirul Feisal Wan Zahir", "label": "PERSON", "start": 43, "end": 72},
-            {"text": "1 January 2027", "label": "DATE", "start": 128, "end": 142},
-            {"text": "Amirul Feisal", "label": "PERSON", "start": 144, "end": 157},
-            {"text": "Datuk Fadzillah Kamaruddin", "label": "PERSON", "start": 168, "end": 194},
-            {"text": "Maybank Islamic", "label": "ORG", "start": 287, "end": 302},
-        ],
-        "notes": "Same entity (Amirul Feisal) appears multiple times with different form.",
-        "difficulty": "hard"
-    },
-    {
-        "id": "eval_010",
-        "source": "Public Bank Berhad",
-        "title": "Public Bank reports steady growth in home loan portfolio",
-        "body": "Public Bank Berhad (PBB) recorded a 5.2% increase in its home loan portfolio to RM180 billion as of September 2026, driven by demand in the Klang Valley and Johor. The bank maintained its net interest margin at 2.1% despite competitive pressures.",
-        "gold_entities": [
-            {"text": "Public Bank Berhad", "label": "ORG", "start": 0, "end": 18},
-            {"text": "PBB", "label": "ORG", "start": 20, "end": 23},
-            {"text": "RM180 billion", "label": "MONEY", "start": 80, "end": 93},
-            {"text": "September 2026", "label": "DATE", "start": 101, "end": 115},
-            {"text": "Klang Valley", "label": "GPE", "start": 143, "end": 155},
-            {"text": "Johor", "label": "GPE", "start": 160, "end": 165},
-        ],
-        "notes": "Malaysian geographic names. Abbreviation ORG.",
-        "difficulty": "easy"
-    },
-]
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# 4. Data Splitting (by article identity, 70/15/15)
-# ─────────────────────────────────────────────────────────────────────────────
-
-def split_articles(articles: List[Dict]) -> Tuple[List, List, List]:
-    """Split by article identity (original_id or index). Seed=42."""
-    indices = list(range(len(articles)))
-    random.shuffle(indices)
-    n = len(indices)
-    n_train = int(n * 0.70)
-    n_val   = int(n * 0.15)
-    train_idx = indices[:n_train]
-    val_idx   = indices[n_train:n_train + n_val]
-    test_idx  = indices[n_train + n_val:]
-    train = [articles[i] for i in train_idx]
-    val   = [articles[i] for i in val_idx]
-    test  = [articles[i] for i in test_idx]
-    logger.info(f"Split: train={len(train)}, val={len(val)}, test={len(test)}")
-    return train, val, test
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# 5. Convert to spaCy DocBin
-# ─────────────────────────────────────────────────────────────────────────────
-
-def to_docbin(annotated: List[Dict], nlp) -> DocBin:
-    db = DocBin()
-    skipped = 0
-    for art in annotated:
-        text = art["combined_text"]
-        spans = art["spans"]  # list of (start, end, label)
-        try:
-            doc = nlp.make_doc(text)
-            ents = []
-            for start, end, label in spans:
-                span = doc.char_span(start, end, label=label, alignment_mode="contract")
-                if span is not None:
-                    ents.append(span)
-            doc.ents = spacy.util.filter_spans(ents)
-            db.add(doc)
-        except Exception as e:
-            skipped += 1
-    if skipped:
-        logger.warning(f"Skipped {skipped} docs due to annotation errors")
-    return db
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# 6. Train / fine-tune
-# ─────────────────────────────────────────────────────────────────────────────
-
-def train_model(train_data: List[Dict], val_data: List[Dict]) -> spacy.language.Language:
-    """Fine-tune en_core_web_sm NER on training annotations."""
-    logger.info("Loading base model for fine-tuning…")
-    nlp = spacy.load("en_core_web_sm")
-    ner = nlp.get_pipe("ner")
-
-    # Add any new labels (none needed - we use the model's existing labels)
-    optimizer = nlp.resume_training()
-
-    logger.info(f"Fine-tuning on {len(train_data)} documents…")
-    start = time.time()
-    losses_history = []
-    for epoch in range(3):  # 3 passes over training data
-        random.shuffle(train_data)
-        losses = {}
-        batches = spacy.util.minibatch(train_data, size=8)
-        for batch in batches:
-            examples = []
-            for art in batch:
-                text = art["combined_text"]
-                spans = art["spans"]
-                ref_doc = nlp.make_doc(text)
-                ents = []
-                for start_c, end_c, label in spans:
-                    sp = ref_doc.char_span(start_c, end_c, label=label, alignment_mode="contract")
-                    if sp:
-                        ents.append(sp)
-                ref_doc.ents = spacy.util.filter_spans(ents)
-                pred_doc = nlp.make_doc(text)
-                examples.append(Example(pred_doc, ref_doc))
-            if examples:
-                nlp.update(examples, sgd=optimizer, drop=0.35, losses=losses)
-        epoch_loss = losses.get("ner", 0)
-        losses_history.append(epoch_loss)
-        logger.info(f"  Epoch {epoch+1}/3 | NER loss: {epoch_loss:.4f}")
-
-    elapsed = time.time() - start
-    logger.info(f"Training complete in {elapsed:.1f}s")
-    return nlp, losses_history
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# 7. Evaluate
-# ─────────────────────────────────────────────────────────────────────────────
-
-def evaluate(nlp, eval_examples: List[Dict]) -> Dict:
+def split_articles(
+    articles: List[Dict[str, Any]], seed: int = SEED
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[Dict[str, Any]]]:
     """
-    Compute precision, recall, F1 on the manually-annotated evaluation set.
-    Matching: exact-span AND label matching.
+    Split by near-duplicate cluster, which is stronger than splitting by row.
+
+    Exact duplicates were already removed by the loader.  Remaining
+    near-duplicates receive the same ``near_duplicate_cluster`` and therefore
+    always land in the same split.  The greedy assignment below keeps document
+    counts close to 70/15/15 while never splitting a cluster.
     """
-    tp, fp, fn = 0, 0, 0
-    per_label = {}
-    errors = []
+    clusters: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    for article in articles:
+        key = article.get("near_duplicate_cluster")
+        if not key:
+            key = f"single:{article.get('original_id') or article.get('content_hash')}"
+        clusters[key].append(article)
 
-    for ex in eval_examples:
-        combined = f"{ex['title']}\n\n{ex['body']}"
-        doc = nlp(combined)
-        predicted = set((e.start_char, e.end_char, e.label_) for e in doc.ents)
-        gold = set((g["start"], g["end"], g["label"]) for g in ex["gold_entities"])
+    cluster_ids = list(clusters)
+    random.Random(seed).shuffle(cluster_ids)
 
-        true_pos = predicted & gold
-        false_pos = predicted - gold
-        false_neg = gold - predicted
+    total_documents = len(articles)
+    targets = {"train": 0.70, "validation": 0.15, "test": 0.15}
+    counts = {split: 0 for split in targets}
+    assigned: Dict[str, List[Dict[str, Any]]] = {split: [] for split in targets}
 
-        tp += len(true_pos)
-        fp += len(false_pos)
-        fn += len(false_neg)
+    for cluster_id in cluster_ids:
+        cluster = clusters[cluster_id]
+        split = max(
+            targets,
+            key=lambda candidate: targets[candidate] * total_documents - counts[candidate],
+        )
+        assigned[split].extend(cluster)
+        counts[split] += len(cluster)
 
-        # Per-label stats
-        for _, _, label in true_pos:
-            per_label.setdefault(label, {"tp":0,"fp":0,"fn":0})["tp"] += 1
-        for _, _, label in false_pos:
-            per_label.setdefault(label, {"tp":0,"fp":0,"fn":0})["fp"] += 1
-            errors.append({"type":"FP","article":ex["id"],"entity":label})
-        for _, _, label in false_neg:
-            per_label.setdefault(label, {"tp":0,"fp":0,"fn":0})["fn"] += 1
-            errors.append({"type":"FN","article":ex["id"],"entity":label})
+    for split in assigned:
+        assigned[split].sort(key=lambda article: article.get("original_id", ""))
 
-    precision = tp / (tp + fp) if (tp + fp) else 0
-    recall    = tp / (tp + fn) if (tp + fn) else 0
-    f1        = 2 * precision * recall / (precision + recall) if (precision + recall) else 0
+    logger.info(
+        "Split by near-duplicate cluster (seed=%s): train=%s, validation=%s, test=%s",
+        seed,
+        len(assigned["train"]),
+        len(assigned["validation"]),
+        len(assigned["test"]),
+    )
+    return assigned["train"], assigned["validation"], assigned["test"]
 
-    per_label_metrics = {}
-    for lbl, counts in per_label.items():
-        p = counts["tp"] / (counts["tp"] + counts["fp"]) if (counts["tp"] + counts["fp"]) else 0
-        r = counts["tp"] / (counts["tp"] + counts["fn"]) if (counts["tp"] + counts["fn"]) else 0
-        f = 2*p*r/(p+r) if (p+r) else 0
-        per_label_metrics[lbl] = {"precision":round(p,3),"recall":round(r,3),"f1":round(f,3)}
 
+def label_distribution(articles: List[Dict[str, Any]]) -> Dict[str, int]:
+    """Count weak-label spans per entity label for one split."""
+    counts: Dict[str, int] = {}
+    for article in articles:
+        for _, _, label in article["spans"]:
+            counts[label] = counts.get(label, 0) + 1
+    return dict(sorted(counts.items()))
+
+
+def split_summary(articles: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Document, cluster, span and label counts for one split."""
+    cluster_ids = {
+        article.get("near_duplicate_cluster")
+        for article in articles
+        if article.get("near_duplicate_cluster")
+    }
     return {
-        "overall": {"precision": round(precision,3), "recall": round(recall,3), "f1": round(f1,3)},
-        "per_label": per_label_metrics,
-        "counts": {"tp":tp, "fp":fp, "fn":fn},
-        "sample_errors": errors[:10],
+        "documents": len(articles),
+        "near_duplicate_clusters": len(cluster_ids),
+        "spans": sum(len(article["spans"]) for article in articles),
+        "labels": label_distribution(articles),
     }
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Training and validation-based selection
+# ---------------------------------------------------------------------------
+
+def _make_examples(nlp, batch: List[Dict[str, Any]]) -> List[Example]:
+    examples = []
+    for article in batch:
+        text = article["combined_text"]
+        reference_doc = nlp.make_doc(text)
+        entities = []
+        for start, end, label in article["spans"]:
+            span = reference_doc.char_span(start, end, label=label, alignment_mode="contract")
+            if span is not None:
+                entities.append(span)
+        reference_doc.ents = spacy.util.filter_spans(entities)
+        predicted_doc = nlp.make_doc(text)
+        examples.append(Example(predicted_doc, reference_doc))
+    return examples
+
+
+def _compact_metrics(metrics: Dict[str, Any]) -> Dict[str, Any]:
+    """Keep aggregate validation metrics; raw-text error contexts are omitted."""
+    return {
+        "examples": metrics["examples"],
+        "gold_spans": metrics["gold_spans"],
+        "predicted_spans": metrics["predicted_spans"],
+        "overall": metrics["overall"],
+        "macro": metrics["macro"],
+        "per_label": metrics["per_label"],
+        "counts": metrics["counts"],
+        "errors_total": len(metrics["errors"]),
+        "errors_note": (
+            "Validation error contexts are omitted from the committed report "
+            "because validation examples are raw dataset articles."
+        ),
+    }
+
+
+def train_config(
+    train_data: List[Dict[str, Any]],
+    val_examples: List[Dict[str, Any]],
+    config: Dict[str, Any],
+    seed: int,
+) -> Tuple[Any, List[Dict[str, Any]], Dict[str, Any], float]:
+    """
+    Fine-tune one configuration and keep its best validation epoch.
+
+    Validation is evaluated after every epoch.  The best epoch is selected by
+    exact-span+label F1.  The test set is not touched in this function.
+    """
+    logger.info("Training configuration: %s", config["name"])
+    nlp = spacy.load("en_core_web_sm")
+    optimizer = nlp.resume_training()
+    rng = random.Random(seed)
+
+    history: List[Dict[str, Any]] = []
+    best_epoch = 0
+    best_f1 = -1.0
+    best_metrics: Dict[str, Any] | None = None
+    best_model_bytes: bytes | None = None
+    start = time.time()
+
+    for epoch in range(1, config["epochs"] + 1):
+        rng.shuffle(train_data)
+        losses: Dict[str, float] = {}
+        batches = spacy.util.minibatch(train_data, size=config["batch_size"])
+        for batch in batches:
+            examples = _make_examples(nlp, batch)
+            if examples:
+                nlp.update(
+                    examples,
+                    sgd=optimizer,
+                    drop=config["dropout"],
+                    losses=losses,
+                )
+
+        epoch_loss = float(losses.get("ner", 0.0))
+        validation_metrics = evaluate(nlp, val_examples)
+        validation_f1 = validation_metrics["overall"]["f1"]
+        record = {
+            "epoch": epoch,
+            "ner_loss": epoch_loss,
+            "validation": _compact_metrics(validation_metrics),
+        }
+        history.append(record)
+        logger.info(
+            "  epoch %s/%s | NER loss %.4f | validation P=%.4f R=%.4f F1=%.4f",
+            epoch,
+            config["epochs"],
+            epoch_loss,
+            validation_metrics["overall"]["precision"],
+            validation_metrics["overall"]["recall"],
+            validation_f1,
+        )
+
+        if validation_f1 > best_f1:
+            best_f1 = validation_f1
+            best_epoch = epoch
+            best_metrics = _compact_metrics(validation_metrics)
+            best_model_bytes = nlp.to_bytes()
+
+    if best_model_bytes is None or best_metrics is None:
+        raise RuntimeError(f"No validation checkpoint was produced for {config['name']}")
+
+    nlp.from_bytes(best_model_bytes)
+    elapsed = time.time() - start
+    logger.info(
+        "Configuration %s selected epoch %s with validation F1 %.4f (%.1fs)",
+        config["name"],
+        best_epoch,
+        best_f1,
+        elapsed,
+    )
+    best = {
+        "epoch": best_epoch,
+        "validation": best_metrics,
+        "model_bytes": best_model_bytes,
+    }
+    return nlp, history, best, elapsed
+
+
+# ---------------------------------------------------------------------------
+# Reporting helpers
+# ---------------------------------------------------------------------------
+
+def _validation_examples(val_data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Build an evaluation structure from weak-labelled validation articles."""
+    examples = []
+    for index, article in enumerate(val_data):
+        if not article["spans"]:
+            continue
+        title = article.get("title", "").strip()
+        body = article.get("body", "").strip()
+        if not title or not body:
+            # Fall back to the combined field for synthetic test fixtures.
+            parts = article["combined_text"].split("\n\n", 1)
+            title = parts[0]
+            body = parts[1] if len(parts) > 1 else ""
+        gold_entities = [
+            {
+                "text": article["combined_text"][start:end],
+                "label": label,
+                "start": start,
+                "end": end,
+            }
+            for start, end, label in article["spans"]
+            if label in EVAL_LABELS
+        ]
+        if not gold_entities:
+            continue
+        examples.append(
+            {
+                "id": article.get("original_id") or f"validation_{index:03d}",
+                "original_id": article.get("original_id", ""),
+                "source_row": article.get("source_row"),
+                "title": title,
+                "body": body,
+                "gold_entities": gold_entities,
+                "review_status": "weak-validation",
+            }
+        )
+    return examples
+
+
+def _data_profile(data_report: Dict[str, Any]) -> Dict[str, Any]:
+    """Summarise rows, duplicates, missing values, languages and near-duplicates."""
+    return {
+        "raw_rows": data_report["raw_rows"],
+        "unique_rows": data_report["total_rows"],
+        "duplicates_removed": data_report["total_duplicates"],
+        "id_duplicates_removed": data_report["total_id_duplicates"],
+        "content_duplicates_removed": data_report["total_content_duplicates"],
+        "missing_title": data_report["missing_title"],
+        "missing_body": data_report["missing_body"],
+        "entities_nonempty": data_report["entities_nonempty"],
+        "language_distribution": data_report["language_distribution"],
+        "files": data_report["files"],
+        "near_duplicate_audit": data_report["near_duplicate_audit"],
+    }
+
+
+def _class_imbalance(train_data: List[Dict[str, Any]]) -> Dict[str, Any]:
+    counts = label_distribution(train_data)
+    total = sum(counts.values())
+    shares = {
+        label: round(count / total, 4) if total else 0.0
+        for label, count in counts.items()
+    }
+    return {
+        "note": "Weak labels are dominated by ORG, PERSON and DATE; EVENT and LOC are very rare.",
+        "train_span_counts": counts,
+        "train_span_share": shares,
+    }
+
+
+def _evaluation_provenance(examples: List[Dict[str, Any]]) -> Dict[str, Any]:
+    statuses = sorted({example.get("review_status", "unknown") for example in examples})
+    return {
+        "examples": len(examples),
+        "gold_spans": sum(len(example["gold_entities"]) for example in examples),
+        "review_statuses": statuses,
+        "all_human_reviewed": statuses == ["human-reviewed"],
+        "original_ids_present": all(bool(example.get("original_id")) for example in examples),
+        "source_rows_present": all(example.get("source_row") is not None for example in examples),
+    }
+
+
+# ---------------------------------------------------------------------------
 # Main
-# ─────────────────────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
 
-def main():
-    # Step 1: Load
-    articles = load_articles()
+def main() -> int:
+    articles, data_report = load_articles()
 
-    # Step 2: Load baseline for auto-annotation
-    logger.info("Loading baseline spaCy model…")
+    logger.info("Loading baseline spaCy model...")
     baseline_nlp = spacy.load("en_core_web_sm")
+    baseline_version = baseline_nlp.meta.get("version", "unknown")
 
-    # Step 3: Auto-annotate
     annotated = auto_annotate(articles, baseline_nlp)
-
-    # Step 4: Split
     train_data, val_data, test_data = split_articles(annotated)
 
-    # Step 5: Save annotations to JSONL
-    with open(ANNOT_PATH, "w") as f:
-        for art in annotated:
+    # Text-free weak annotations.  No title/body is written here.
+    split_by_id = {}
+    for split_name, split_articles_list in (
+        ("train", train_data),
+        ("validation", val_data),
+        ("test", test_data),
+    ):
+        for article in split_articles_list:
+            split_by_id[article.get("original_id")] = split_name
+
+    with open(ANNOT_PATH, "w", encoding="utf-8") as file_handle:
+        for article in annotated:
+            combined = article["combined_text"]
             record = {
-                "original_id": art["original_id"],
-                "clipping": art["clipping"],
-                "language": art["language"],
-                "combined_text": art["combined_text"][:500],  # truncate for storage
-                "spans": art["spans"],
-                "human_reviewed": art["human_reviewed"],
+                "original_id": article.get("original_id", ""),
+                "source_row": article.get("source_row"),
+                "source_name": article.get("source_name", ""),
+                "date_published": article.get("date_published", ""),
+                "clipping": article.get("clipping", ""),
+                "language": article.get("language", ""),
+                "near_duplicate_cluster": article.get("near_duplicate_cluster"),
+                "split": split_by_id.get(article.get("original_id"), "unknown"),
+                "text_sha256": hashlib.sha256(combined.encode("utf-8")).hexdigest(),
+                "spans": article["spans"],
+                "label_source": "weak_baseline_en_core_web_sm",
+                "human_reviewed": False,
             }
-            f.write(json.dumps(record) + "\n")
-    logger.info(f"Annotations saved to {ANNOT_PATH}")
+            file_handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+    logger.info("Text-free weak annotations saved to %s", ANNOT_PATH)
 
-    # Save evaluation examples
-    with open(EVAL_PATH, "w") as f:
-        json.dump(EVALUATION_EXAMPLES, f, indent=2)
-    logger.info(f"Evaluation examples saved to {EVAL_PATH}")
+    eval_examples = load_eval_examples(EVAL_PATH)
+    provenance = _evaluation_provenance(eval_examples)
+    logger.info(
+        "Loaded %s evaluation examples / %s gold spans | review status: %s",
+        provenance["examples"],
+        provenance["gold_spans"],
+        provenance["review_statuses"],
+    )
 
-    # Step 6: Baseline evaluation
-    logger.info("\n=== BASELINE EVALUATION ===")
-    baseline_metrics = evaluate(baseline_nlp, EVALUATION_EXAMPLES)
-    logger.info(f"Baseline Overall: {baseline_metrics['overall']}")
+    logger.info("=== BASELINE EVALUATION (HELD-OUT EVALUATION SET) ===")
+    baseline_metrics = evaluate(baseline_nlp, eval_examples)
+    logger.info("Baseline overall: %s", baseline_metrics["overall"])
 
-    # Step 7: Fine-tune
-    logger.info("\n=== FINE-TUNING ===")
-    trained_nlp, losses = train_model(train_data, val_data)
+    val_examples = _validation_examples(val_data)
+    logger.info(
+        "Validation set: %s examples / %s weak gold spans",
+        len(val_examples),
+        sum(len(example["gold_entities"]) for example in val_examples),
+    )
 
-    # Step 8: Validation evaluation
-    logger.info("\n=== VALIDATION EVALUATION ===")
-    # Use last 20 val articles as quick check
-    val_eval = [{"title":a["combined_text"][:100],"body":a["combined_text"][100:],
-                 "gold_entities":[{"text":a["combined_text"][s:e],"label":l,"start":s,"end":e}
-                                  for s,e,l in a["spans"]], "id":a.get("original_id","v")}
-                for a in val_data[:20] if a["spans"]]
-    if val_eval:
-        val_metrics = evaluate(trained_nlp, val_eval)
-        logger.info(f"Val Overall (weak labels): {val_metrics['overall']}")
+    logger.info("=== VALIDATION-BASED CONFIGURATION SEARCH ===")
+    config_results = []
+    for config_index, config in enumerate(TRAINING_CONFIGS):
+        trained_nlp, history, best, elapsed = train_config(
+            train_data,
+            val_examples,
+            config,
+            seed=SEED + config_index,
+        )
+        config_results.append(
+            {
+                "name": config["name"],
+                "settings": {
+                    "base_model": "en_core_web_sm",
+                    "epochs": config["epochs"],
+                    "dropout": config["dropout"],
+                    "batch_size": config["batch_size"],
+                    "seed": SEED + config_index,
+                },
+                "history": history,
+                "best_epoch": best["epoch"],
+                "best_validation": best["validation"],
+                "training_seconds": round(elapsed, 2),
+                "_trained_nlp": trained_nlp,
+            }
+        )
 
-    # Step 9: Test evaluation on gold labels
-    logger.info("\n=== TEST EVALUATION (Gold Labels) ===")
-    test_metrics = evaluate(trained_nlp, EVALUATION_EXAMPLES)
-    logger.info(f"Trained Overall: {test_metrics['overall']}")
-    logger.info(f"Per-label: {test_metrics['per_label']}")
+    selected = max(
+        config_results,
+        key=lambda result: result["best_validation"]["overall"]["f1"],
+    )
+    trained_nlp = selected["_trained_nlp"]
+    selected_validation_f1 = selected["best_validation"]["overall"]["f1"]
+    logger.info(
+        "Selected configuration %s at epoch %s by validation F1 %.4f",
+        selected["name"],
+        selected["best_epoch"],
+        selected_validation_f1,
+    )
 
-    # Step 10: Save trained model
+    logger.info("=== FINAL TEST EVALUATION (UNTOUCHED EVALUATION SET) ===")
+    test_metrics = evaluate(trained_nlp, eval_examples)
+    logger.info("Trained overall: %s", test_metrics["overall"])
+    logger.info("Per-label: %s", test_metrics["per_label"])
+
+    logger.info("Saving selected model to %s", MODEL_OUT)
+    if os.path.isdir(MODEL_OUT):
+        shutil.rmtree(MODEL_OUT)
     trained_nlp.to_disk(MODEL_OUT)
-    logger.info(f"Trained model saved to {MODEL_OUT}")
 
-    # Report
+    public_config_results = []
+    for result in config_results:
+        clean_result = {key: value for key, value in result.items() if not key.startswith("_")}
+        public_config_results.append(clean_result)
+
     report = {
         "seed": SEED,
+        "annotation": {
+            "training_labels": "weak supervision from en_core_web_sm (not human-reviewed)",
+            "evaluation_labels": "span annotations in data/evaluation_examples.json",
+            "matching": "exact-span+label",
+            "labels_evaluated": sorted(EVAL_LABELS),
+            "test_used_for_tuning": False,
+            "entities_column": (
+                "The provided entities column was empty for all 1,291 raw rows; "
+                "it was inspected and not treated as gold."
+            ),
+            "evaluation_set_provenance": provenance,
+        },
+        "data_profile": _data_profile(data_report),
         "data_split": {
-            "train": len(train_data),
-            "validation": len(val_data),
-            "test": len(test_data),
+            "train": split_summary(train_data),
+            "validation": split_summary(val_data),
+            "test": split_summary(test_data),
+        },
+        "class_imbalance": _class_imbalance(train_data),
+        "validation_tuning": {
+            "selection_metric": "validation exact-span+label F1",
+            "configs": public_config_results,
+            "selected_config": selected["name"],
+            "selected_epoch": selected["best_epoch"],
+            "selected_validation_f1": selected_validation_f1,
+            "test_used_for_selection": False,
+        },
+        "model_settings": {
+            "base_model": "en_core_web_sm",
+            "base_model_version": baseline_version,
+            "spacy_version": spacy.__version__,
+            "selected_config": selected["name"],
+            "selected_epoch": selected["best_epoch"],
+            "epochs": selected["settings"]["epochs"],
+            "dropout": selected["settings"]["dropout"],
+            "batch_size": selected["settings"]["batch_size"],
+            "seed": selected["settings"]["seed"],
+            "split_unit": "near-duplicate cluster / article identity",
+            "split_ratio": "70/15/15",
+        },
+        "training_seconds": selected["training_seconds"],
+        "training_seconds_total": round(
+            sum(result["training_seconds"] for result in public_config_results), 2
+        ),
+        "losses_per_epoch": [record["ner_loss"] for record in selected["history"]],
+        "validation_history": selected["history"],
+        "evaluation_examples": {
+            "count": len(eval_examples),
+            "gold_spans": sum(len(example["gold_entities"]) for example in eval_examples),
+            "matching": "exact-span+label",
+            "labels": sorted(EVAL_LABELS),
+            "provenance": provenance,
         },
         "baseline_metrics": baseline_metrics,
-        "trained_metrics": test_metrics,
-        "losses_per_epoch": [float(l) for l in losses],
-        "model_saved_to": MODEL_OUT,
+        "validation_metrics": selected["best_validation"],
+        "test_metrics": test_metrics,
+        "model_saved_to": os.path.relpath(MODEL_OUT, PROJECT_DIR).replace("\\", "/"),
     }
+
     report_path = os.path.join(DATA_DIR, "training_report.json")
-    with open(report_path, "w") as f:
-        json.dump(report, f, indent=2)
-    logger.info(f"\nFull report saved to {report_path}")
-    print("\n" + "="*60)
+    with open(report_path, "w", encoding="utf-8") as file_handle:
+        json.dump(report, file_handle, indent=2, ensure_ascii=False)
+    logger.info("Full report saved to %s", report_path)
+
+    print("\n" + "=" * 60)
     print("TRAINING COMPLETE")
-    print("="*60)
-    print(f"Baseline F1:  {baseline_metrics['overall']['f1']:.3f}")
-    print(f"Trained  F1:  {test_metrics['overall']['f1']:.3f}")
-    print(f"Model saved:  {MODEL_OUT}")
+    print("=" * 60)
+    print(f"Baseline F1 (test):       {baseline_metrics['overall']['f1']:.3f}")
+    print(f"Trained  F1 (test):       {test_metrics['overall']['f1']:.3f}")
+    print(f"Validation F1 (selected): {selected_validation_f1:.3f}")
+    print(f"Selected configuration:   {selected['name']} @ epoch {selected['best_epoch']}")
+    print(f"Model saved:              {MODEL_OUT}")
+    print(f"Weak annotations:         {ANNOT_PATH}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

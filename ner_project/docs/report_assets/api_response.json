@@ -1,0 +1,69 @@
+{
+  "entities": [
+    {
+      "end": 52,
+      "label": "DATE",
+      "start": 45,
+      "text": "Q3 2026"
+    },
+    {
+      "end": 66,
+      "label": "GPE",
+      "start": 54,
+      "text": "Kuala Lumpur"
+    },
+    {
+      "end": 81,
+      "label": "ORG",
+      "start": 68,
+      "text": "Maybank Group"
+    },
+    {
+      "end": 108,
+      "label": "GPE",
+      "start": 100,
+      "text": "Malaysia"
+    },
+    {
+      "end": 185,
+      "label": "DATE",
+      "start": 160,
+      "text": "the third quarter of 2026"
+    },
+    {
+      "end": 235,
+      "label": "PERSON",
+      "start": 211,
+      "text": "Datuk Khairussaleh Ramli"
+    },
+    {
+      "end": 279,
+      "label": "ORG",
+      "start": 274,
+      "text": "ASEAN"
+    },
+    {
+      "end": 307,
+      "label": "GPE",
+      "start": 298,
+      "text": "Singapore"
+    },
+    {
+      "end": 321,
+      "label": "GPE",
+      "start": 312,
+      "text": "Indonesia"
+    },
+    {
+      "end": 409,
+      "label": "DATE",
+      "start": 392,
+      "text": "30 September 2026"
+    }
+  ],
+  "meta": {
+    "entity_count": 10,
+    "model": "trained-model",
+    "text_length": 410
+  }
+}
