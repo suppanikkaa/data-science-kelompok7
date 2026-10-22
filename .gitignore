@@ -17,3 +17,7 @@ clipping-information.txt
 Thumbs.db
 .vscode/
 .idea/
+
+# Additional sensitive files
+*.pdf
+*.txt

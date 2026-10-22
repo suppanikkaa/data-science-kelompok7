@@ -24,3 +24,7 @@ data/annotations.jsonl
 Thumbs.db
 .idea/
 .vscode/
+
+# Additional sensitive files
+*.pdf
+*.txt
